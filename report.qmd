@@ -1,0 +1,65 @@
+---
+title: "Title of your report"
+subtitle: "Project report of Group #"
+author:
+  - name: "Student 1"
+    affiliation: "MSc Geomatics"
+  - name: "Student 2"
+    affiliation: "MSc Landscape Architecture"
+  - name: "Student 3"
+    affiliation: "MSc Urbanism"
+  - name: "Student 4"
+    affiliation: "MSc Urbanism"
+  - name: "Student 5"
+    affiliation: "MSc Landscape Architecture"
+format: html
+---
+
+::: callout
+## This is a computational notebook
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this 
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+You can delete this entire callout between and including the lines
+```
+::: callout
+```
+and
+
+```
+:::
+```
+and start the report from the Introduction section below.
+:::
+
+## Introduction
+
+## Methods
+
+### MCDA
+
+### Typology construction
+
+## Results
+
+## Discussion
+
+## Conclusion
+
