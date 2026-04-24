@@ -8,7 +8,7 @@ author:
     affiliation: "MSc Geomatics"
   - name: "Julia Fossa Marques"
     affiliation: "MSc Geomatics"
-  - name: "Student 4"
+  - name: "Prianka Girish Bali"
     affiliation: "MSc Urbanism"
 format: html
 ---
