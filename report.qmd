@@ -8,8 +8,8 @@ author:
     affiliation: "MSc Landscape Architecture"
   - name: "Student 3"
     affiliation: "MSc Urbanism"
-  - name: "Student 4"
-    affiliation: "MSc Urbanism"
+  - name: "Chaeyeon Moon"
+    affiliation: "MSc Geomatics"
 format: html
 ---
 
