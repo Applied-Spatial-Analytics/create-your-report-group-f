@@ -10,8 +10,6 @@ author:
     affiliation: "MSc Urbanism"
   - name: "Student 4"
     affiliation: "MSc Urbanism"
-  - name: "Student 5"
-    affiliation: "MSc Landscape Architecture"
 format: html
 ---
 
