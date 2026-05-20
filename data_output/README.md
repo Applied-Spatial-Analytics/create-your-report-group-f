@@ -1,13 +1,13 @@
 <table style="table-layout: fixed; width: 100%; word-wrap: break-word;">
   <thead>
     <tr>
-      <th style="width: 10%;">File name</th>
-      <th style="width: 20%;">Description</th>
-      <th style="width: 12%;">Variables (Columns)</th>
-      <th style="width: 12%;">Spatial Resolution</th>
-      <th style="width: 12%;">Temporal Resolution</th>
-      <th style="width: 12%;">Values</th>
-      <th style="width: 10%;">Source Link</th>
+      <th style="width: 13%;">File name</th>
+      <th style="width: 17%;">Description</th>
+      <th style="width: 15%;">Variables (Columns)</th>
+      <th style="width: 15%;">Spatial Resolution</th>
+      <th style="width: 15%;">Temporal Resolution</th>
+      <th style="width: 15%;">Values</th>
+      <th style="width: 9%;">Source Link</th>
     </tr>
   </thead>
   <tbody>
