@@ -13,7 +13,7 @@ library(osmdata)
 bbdelft <- getbb("Delft")
 bbdelft #to check the min/max coordinates and see if we got the right city
 
-bbxian <- getbb("Xian")
+bbxian <- getbb("Xi'an")
 bbxian
 
 #if there is a connection error, try this command:
