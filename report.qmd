@@ -4,7 +4,7 @@ subtitle: "Project report of Group #"
 author:
   - name: "Chaeyeon Moon"
     affiliation: "MSc Geomatics"
-  - name: "Eva"
+  - name: "Evangelia Angeliki Palli"
     affiliation: "MSc Geomatics"
   - name: "Julia Fossa Marques"
     affiliation: "MSc Geomatics"
