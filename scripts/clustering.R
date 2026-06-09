@@ -2,7 +2,7 @@ library(sf) # for processing vector data DELETE WHILE MERGING ONLY FOR SELF-CHEC
 library(dplyr) # for selecting and transforming data
 
 # Step 0. Configuration
-CITY_NAME        <- "delft"  # Used to automatically label output files
+CITY_NAME        <- "xian"  # Used to automatically label output files
 OUTPUT_DIR       <- "data/"
 
 # Step 1. Data Preparation
