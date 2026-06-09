@@ -7,9 +7,9 @@ library(cowplot)
 library(ggplot2)
 
 # 0. Configuration
-CITY_NAME        <- "xian"  # Used to automatically label output files
-PATH_STREETS_IN  <- "data/vector/xian_net.gpkg"
-PATH_RASTER_IN   <- "data/raster/landsat_xian.tif"
+CITY_NAME        <- "delft"  # Used to automatically label output files
+PATH_STREETS_IN  <- "data/vector/delft_raw_streets.gpkg"
+PATH_RASTER_IN   <- "data/raster/landsat_delft.tif"
 OUTPUT_DIR       <- "data/"
 
 
@@ -108,7 +108,7 @@ message("Pipeline complete! All files exported successfully to the data director
 
 
 
-bivariate_matrix <- bi_class(delft_streets_analyzed, x = choice_score, y = surface_temp, style = "quantile", dim = 3)
+bivariate_matrix <- bi_class(streets_analyzed, x = choice_score, y = surface_temp, style = "quantile", dim = 3)
 
 map_canvas <- ggplot() +
   geom_sf(data = bivariate_matrix, aes(color = bi_class), size = 0.5, show.legend = FALSE) +
@@ -127,8 +127,8 @@ message("Yay done!")
 
 # 6. Angular choice plot and save
 isolated_choice_plot <- ggplot() +
-  geom_sf(data = delft_streets_analyzed, color = "#e2e8f0", size = 0.4) +
-  geom_sf(data = delft_streets_analyzed,
+  geom_sf(data = streets_analyzed, color = "#e2e8f0", size = 0.4) +
+  geom_sf(data = streets_analyzed,
           aes(color = choice_score, size = choice_score),
           show.legend = "legend") +
   scale_color_viridis_c(
@@ -159,7 +159,7 @@ ggplot2::ggsave(
 
 # 7. Thermal map plot and save
 # 1. Convert the satellite grid into a standard data frame of X, Y, and Temp coordinates
-delft_raster_df <- as.data.frame(delft_raster_clipped, xy = TRUE, na.rm = TRUE)
+delft_raster_df <- as.data.frame(raster_clipped, xy = TRUE, na.rm = TRUE)
 
 # Rename the columns so the code is easy to read
 # (Assuming your raster's layer name is column 3)
@@ -196,4 +196,26 @@ ggplot2::ggsave(
   height = 8,
   dpi = 300
 )
+
+
+# 8. Export .gpkg for Clustering
+library(dplyr)
+
+# 1. Cleaning the Attributes Table to only have geometry and computed variables
+message("Cleaning GeoData... ")
+streets_clean <- streets_analyzed %>%
+  select(
+    choice_score,
+    surface_temp,
+    geom
+  )
+
+#2. Exporting the Geopackage
+message("Exporting GeoPackage...")
+st_write(
+  streets_clean,
+  paste0(OUTPUT_DIR, CITY_NAME, "_street_metrics.gpkg"),
+  delete_dsn = TRUE
+)
+message("GeoPackage exported successfully.Wohoo!")
 
