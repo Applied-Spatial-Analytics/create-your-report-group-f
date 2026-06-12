@@ -9,13 +9,13 @@ library(dplyr)
 library(plotly)
 
 # ========================================================
-# 0. Configuration 
+# 0. Configuration
 # ========================================================
-CITY_NAME     <- "xian"   # "xian" or "delft"
-PROJECTED_CRS <- 32649    # Xian: 32649, Delft: 28992 
+CITY_NAME     <- "delft"   # "xian" or "delft"
+PROJECTED_CRS <- 28992    # Xian: 32649, Delft: 28992
 OUTPUT_DIR    <- "output/"
 
-PATH_STREETS_IN <- paste0("data/", CITY_NAME, "_network.gpkg")
+PATH_STREETS_IN <- paste0("data/", CITY_NAME, "_coins_network.gpkg")
 PATH_RASTER_IN  <- paste0("data/", CITY_NAME, "_landsat.tif")
 PATH_GREEN_IN   <- paste0("data/", CITY_NAME, "_green.geojson")
 PATH_BLUE_IN    <- paste0("data/", CITY_NAME, "_blue.geojson")
@@ -37,7 +37,7 @@ blue_space   <- st_transform(blue_space, PROJECTED_CRS)
 
 # [Raster] Temperature conversion & clipping
 raster_temp_c <- (raster_raw * 0.00341802) + 149.0 - 273.15
-raster_proj <- project(raster_temp_c, crs(streets_proj)) 
+raster_proj <- project(raster_temp_c, crs(streets_proj))
 raster_clipped <- crop(raster_proj, vect(streets_proj))
 
 
@@ -84,27 +84,59 @@ streets_analyzed <- streets_analyzed |>
 # ========================================================
 message("Preparing feature matrix for clustering...")
 
-# Extract variables 
+# Extract variables
 features <- streets_analyzed |>
   select(choice_score, surface_temp, dist_to_green, dist_to_blue) |>
   st_drop_geometry() |>
-  mutate(across(everything(), ~ifelse(is.na(.), mean(., na.rm = TRUE), .))) 
+  mutate(across(everything(), ~ifelse(is.na(.), mean(., na.rm = TRUE), .)))
+
 
 # Standardize variables
-X_scaled <- scale(features) 
+X_scaled <- scale(features)
 
 # Configure weights
 weights <- c(choice_score = 1.0,
              surface_temp = 2.0,
-             dist_to_green = 0.5, 
+             dist_to_green = 0.5,
              dist_to_blue = 0.5)
 
 # Reflect weights
 X_weighted <- sweep(X_scaled, 2, weights, `*`)
 
+# Determine the optimal K
+# Initialize an empty numeric vector to store inertia values
+inertia <- numeric()
+
+# Try k values from 2 to 9
+k_values <- 2:9
+
+# Loop through each k value
+message("Calculating elbow curve...")
+for (k in k_values) {
+  km <- kmeans(X_weighted, centers = k, nstart = 20)
+
+  # # tot.withinss = Total Within-Cluster Sum of Squares
+  # This measures how compact the clusters are: lower is better.
+  inertia <- c(inertia, km$tot.withinss)
+}
+
+# Combine the results into a data frame for plotting
+elbow_df <- data.frame(k = k_values, inertia = inertia)
+
+
+print(elbow_df)
+
+message("Elbow calculation complete.")
+
+# Make the elbow plot
+plot(k_values, inertia,
+     type = "b",                  # shown both points + lines
+     col = "black",
+     main = "Elbow Method")
+
 message("Starting K-Means Clustering...")
-set.seed(0) 
-k <- 4      
+set.seed(0)
+k <- 3
 
 kmeans_result <- kmeans(X_weighted, centers = k, nstart = 20)
 streets_analyzed$cluster <- as.factor(kmeans_result$cluster)
@@ -113,8 +145,8 @@ streets_analyzed$cluster <- as.factor(kmeans_result$cluster)
 message("> Extracting Cluster Summary Statistics...")
 
 cluster_summary <- streets_analyzed |>
-  st_drop_geometry() |>       
-  group_by(cluster) |>        
+  st_drop_geometry() |>
+  group_by(cluster) |>
   summarise(
     # Calculate mean, min, max
     across(c(choice_score, surface_temp, dist_to_green, dist_to_blue),
@@ -123,7 +155,7 @@ cluster_summary <- streets_analyzed |>
              min  = ~min(., na.rm = TRUE),
              max  = ~max(., na.rm = TRUE)
            ),
-           .names = "{.col}_{.fn}") 
+           .names = "{.col}_{.fn}")
   ) |>
   mutate(across(where(is.numeric), ~round(., 2)))
 
@@ -157,11 +189,11 @@ ggsave(paste0(OUTPUT_DIR, CITY_NAME, "_clustered.png"), cluster_map, width = 10,
 message("> (3) Cluster plot - 3D Tetrahedron")
 
 # Normalize variables (0~1)
-normalize_minmax <- function(x) { 
-  (x - min(x, na.rm=TRUE)) / (max(x, na.rm=TRUE) - min(x, na.rm=TRUE)) 
+normalize_minmax <- function(x) {
+  (x - min(x, na.rm=TRUE)) / (max(x, na.rm=TRUE) - min(x, na.rm=TRUE))
 }
 
-# Set a dataframe 
+# Set a dataframe
 features_minmax <- features %>%
   mutate(across(everything(), normalize_minmax))
 
@@ -195,14 +227,14 @@ quat_plot <- plot_ly() %>%
   add_trace(x = edge_x, y = edge_y, z = edge_z, type = 'scatter3d', mode = 'lines',
             line = list(color = 'gray', width = 2), hoverinfo = 'none', showlegend = FALSE) %>%
   # Add labels for each vertex
-  add_trace(x = c(v1[1], v2[1], v3[1], v4[1]), 
-            y = c(v1[2], v2[2], v3[2], v4[2]), 
-            z = c(v1[3], v2[3], v3[3], v4[3]), 
+  add_trace(x = c(v1[1], v2[1], v3[1], v4[1]),
+            y = c(v1[2], v2[2], v3[2], v4[2]),
+            z = c(v1[3], v2[3], v3[3], v4[3]),
             type = 'scatter3d', mode = 'text',
             text = c("<b>Popularity</b>", "<b>Surface Temp</b>", "<b>Dist to Green</b>", "<b>Dist to Blue</b>"),
             textfont = list(size = 14, color = "black"), hoverinfo = 'none', showlegend = FALSE) %>%
   # Add actual data points mapped to cluster colors
-  add_trace(data = plot_data_3d, x = ~X, y = ~Y, z = ~Z, 
+  add_trace(data = plot_data_3d, x = ~X, y = ~Y, z = ~Z,
             type = 'scatter3d', mode = 'markers',
             color = ~cluster, colors = cluster_colors,
             marker = list(size = 4, opacity = 0.8)) %>%
@@ -244,7 +276,7 @@ par_coord_plot_avg <- plot_ly(type = 'parcoords',
                               line = list(
                                 color = ~cluster_num,
                                 colorscale = list(c(0, '#65C3A1'), c(0.33, '#FC9964'), c(0.66, '#869DC5'), c(1, '#E597C0')),
-                                width = 4 
+                                width = 4
                               ),
                               dimensions = list(
                                 list(range = c(min(raw_data$choice_score, na.rm=T), max(raw_data$choice_score, na.rm=T)),
@@ -293,3 +325,48 @@ ggsave(filename = paste0(OUTPUT_DIR, CITY_NAME, "_bivariate_map.png"), plot = fi
 
 
 message("Pipeline complete! All processes done. Yay!")
+
+
+# ========================================================
+# TESTING OUTPUTS (DELETE LATER)
+# ========================================================
+
+message("> Cluster Means")
+
+cluster_summary |>
+  select(
+    cluster,
+    choice_score_mean,
+    surface_temp_mean,
+    dist_to_green_mean,
+    dist_to_blue_mean
+  ) |>
+  print()
+
+message("> Cluster Sizes")
+
+streets_analyzed |>
+  st_drop_geometry() |>
+  count(cluster) |>
+  mutate(
+    percent = round(n / sum(n) * 100, 1)
+  ) |>
+  print()
+
+cluster_summary |>
+  select(
+    cluster,
+    choice_score_min,
+    choice_score_max,
+    surface_temp_min,
+    surface_temp_max,
+    )
+
+cluster_summary |>
+  select(
+    cluster,
+    dist_to_green_min,
+    dist_to_green_max,
+    dist_to_blue_min,
+    dist_to_blue_max
+  )
