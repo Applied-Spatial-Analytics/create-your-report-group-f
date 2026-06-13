@@ -93,7 +93,9 @@ coins_net <- st_read(PATH_COINS_IN, layer = "strokes_0", quiet = TRUE) |>
 intersected <- st_intersection(coins_net, streets_analyzed)
 intersected$overlap_length <- as.numeric(st_length(intersected))
 
-# COINS ID별로 겹치는 길이를 가중치로 두어 가중 평균(Weighted Mean) 산출
+# Aggregate variables for each COINS segment using a Length-Weighted Mean.
+# We group the data by 'coins_id' and apply 'overlap_length' as the weight, 
+# ensuring that longer overlapping raw segments contribute proportionally more to the final value.
 aggregated_coins <- intersected |>
   st_drop_geometry() |>
   group_by(coins_id) |>
