@@ -109,7 +109,7 @@ streets_coins_analyzed <- coins_net |>
   left_join(aggregated_coins, by = "coins_id")
 
 # Create an output file
-st_write(streets_coins_analyzed, paste0(OUTPUT_DIR, CITY_NAME, "_variables.gpkg"), delete_dsn = TRUE, quiet = TRUE)
+st_write(streets_coins_analyzed, paste0("data/", CITY_NAME, "_variables.gpkg"), delete_dsn = TRUE, quiet = TRUE)
 
 # ========================================================
 # 4. K-Means Clustering (on Aggregated COINS Network)
@@ -117,7 +117,7 @@ st_write(streets_coins_analyzed, paste0(OUTPUT_DIR, CITY_NAME, "_variables.gpkg"
 message("Loading aggregated COINS network for clustering...")
 
 # Read CITY_variables.gpkg
-streets_analyzed <- st_read(paste0(OUTPUT_DIR, CITY_NAME, "_variables.gpkg"), quiet = TRUE)
+streets_analyzed <- st_read(paste0("data/", CITY_NAME, "_variables.gpkg"), quiet = TRUE)
 
 message("Preparing feature matrix for clustering...")
 
@@ -329,8 +329,8 @@ par_coord_plot_avg <- plot_ly(type = 'parcoords',
 
 par_coord_plot_avg
 
-# Output 5. Cluster statistic - CSV (mean, max, min)
-message("> (5) Cluster statistic - CSV (mean, max, min)")
+# Output 5. Cluster statistic - CSV (mean, median, max, min)
+message("> (5) Cluster statistic - CSV (mean, median, max, min)")
 
 write.csv(cluster_summary, paste0(OUTPUT_DIR, CITY_NAME, "_cluster_statistic.csv"), row.names = FALSE)
 
@@ -366,6 +366,19 @@ message("Pipeline complete! All processes done. Yay!")
 # ========================================================
 # TESTING OUTPUTS (DELETE LATER)
 # ========================================================
+
+message("> Cluster Means")
+
+cluster_summary |>
+  select(
+    cluster,
+    choice_score_mean,
+    surface_temp_mean,
+    dist_to_green_mean,
+    dist_to_blue_mean
+  ) |>
+  print()
+
 message("> Cluster Sizes")
 
 streets_analyzed |>
@@ -375,3 +388,21 @@ streets_analyzed |>
     percent = round(n / sum(n) * 100, 1)
   ) |>
   print()
+
+cluster_summary |>
+  select(
+    cluster,
+    choice_score_min,
+    choice_score_max,
+    surface_temp_min,
+    surface_temp_max,
+  )
+
+cluster_summary |>
+  select(
+    cluster,
+    dist_to_green_min,
+    dist_to_green_max,
+    dist_to_blue_min,
+    dist_to_blue_max
+  )
