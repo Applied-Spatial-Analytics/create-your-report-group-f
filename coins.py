@@ -4,17 +4,14 @@ import momepy
 # UPDATE THESE FIELDS BEFORE RUNNING:
 
 #path to input file:
-input_file = "C:/Users/Julia Marques/Downloads/NEAT_xian_network.gpkg"
-
-#input layer name:
-input_layer = "NEAT_xian_network"
+input_file = "/Users/moonchaeyeon/Desktop/moon/tudelft/Q4/ARFW0501/data/delft_network_neat.gpkg"
 
 #name of output geopackage file:
-output_file = "output_coins.gpkg"
+output_file = "/Users/moonchaeyeon/Desktop/moon/tudelft/Q4/ARFW0501/data/delft_network_coins.gpkg"
 
 #name to output geopackage layers
-layer_segments = 'segments_xian_0'
-layer_strokes = 'strokes_xian_0'
+layer_segments = 'segments_0'
+layer_strokes = 'strokes_0'
 
 # CODE STARTS HERE
 
