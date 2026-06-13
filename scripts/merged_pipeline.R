@@ -11,11 +11,12 @@ library(plotly)
 # ========================================================
 # 0. Configuration
 # ========================================================
-CITY_NAME     <- "delft"   # "xian" or "delft"
-PROJECTED_CRS <- 28992    # Xian: 32649, Delft: 28992
+CITY_NAME     <- "xian"   # "xian" or "delft"
+PROJECTED_CRS <- 32649    # Xian: 32649, Delft: 28992
 OUTPUT_DIR    <- "output/"
 
-PATH_STREETS_IN <- paste0("data/", CITY_NAME, "_coins_network.gpkg")
+PATH_STREETS_IN <- paste0("data/", CITY_NAME, "_network_neat.gpkg")
+PATH_COINS_IN <- paste0("data/", CITY_NAME, "_network_coins.gpkg")
 PATH_RASTER_IN  <- paste0("data/", CITY_NAME, "_landsat.tif")
 PATH_GREEN_IN   <- paste0("data/", CITY_NAME, "_green.geojson")
 PATH_BLUE_IN    <- paste0("data/", CITY_NAME, "_blue.geojson")
@@ -78,18 +79,54 @@ streets_analyzed <- streets_analyzed |>
     dist_to_blue = as.numeric(st_distance(streets_analyzed, blue_space[nearest_blue_idx, ], by_element = TRUE))
   )
 
+# ========================================================
+# 3. Aggregate Variables to COINS Network
+# ========================================================
+message("> Aggregating variables to COINS network...")
+
+# Set CRS of COINS network & street ID
+coins_net <- st_read(PATH_COINS_IN, layer = "strokes_0", quiet = TRUE) |>
+  st_transform(PROJECTED_CRS) |>
+  mutate(coins_id = row_number())
+
+# Calculate length of intersection of raw network and COINS network
+intersected <- st_intersection(coins_net, streets_analyzed)
+intersected$overlap_length <- as.numeric(st_length(intersected))
+
+# COINS ID별로 겹치는 길이를 가중치로 두어 가중 평균(Weighted Mean) 산출
+aggregated_coins <- intersected |>
+  st_drop_geometry() |>
+  group_by(coins_id) |>
+  summarise(
+    choice_score  = weighted.mean(choice_score, overlap_length, na.rm = TRUE),
+    surface_temp  = weighted.mean(surface_temp, overlap_length, na.rm = TRUE),
+    dist_to_green = weighted.mean(dist_to_green, overlap_length, na.rm = TRUE),
+    dist_to_blue  = weighted.mean(dist_to_blue, overlap_length, na.rm = TRUE)
+  )
+
+# Join tables
+streets_coins_analyzed <- coins_net |>
+  left_join(aggregated_coins, by = "coins_id")
+
+# Create an output file
+st_write(streets_coins_analyzed, paste0(OUTPUT_DIR, CITY_NAME, "_variables.gpkg"), delete_dsn = TRUE, quiet = TRUE)
 
 # ========================================================
-# 3. K-Means Clustering
+# 4. K-Means Clustering (on Aggregated COINS Network)
 # ========================================================
+message("Loading aggregated COINS network for clustering...")
+
+# Read CITY_variables.gpkg
+streets_analyzed <- st_read(paste0(OUTPUT_DIR, CITY_NAME, "_variables.gpkg"), quiet = TRUE)
+
 message("Preparing feature matrix for clustering...")
 
 # Extract variables
 features <- streets_analyzed |>
   select(choice_score, surface_temp, dist_to_green, dist_to_blue) |>
   st_drop_geometry() |>
-  mutate(across(everything(), ~ifelse(is.na(.), mean(., na.rm = TRUE), .)))
-
+  mutate(across(everything(), ~ifelse(is.na(.), mean(., na.rm = TRUE), .))) |>
+  mutate(choice_score = log1p(choice_score))  # log
 
 # Standardize variables
 X_scaled <- scale(features)
@@ -114,7 +151,7 @@ k_values <- 2:9
 message("Calculating elbow curve...")
 for (k in k_values) {
   km <- kmeans(X_weighted, centers = k, nstart = 20)
-
+  
   # # tot.withinss = Total Within-Cluster Sum of Squares
   # This measures how compact the clusters are: lower is better.
   inertia <- c(inertia, km$tot.withinss)
@@ -122,7 +159,6 @@ for (k in k_values) {
 
 # Combine the results into a data frame for plotting
 elbow_df <- data.frame(k = k_values, inertia = inertia)
-
 
 print(elbow_df)
 
@@ -136,7 +172,7 @@ plot(k_values, inertia,
 
 message("Starting K-Means Clustering...")
 set.seed(0)
-k <- 3
+k <- 4
 
 kmeans_result <- kmeans(X_weighted, centers = k, nstart = 20)
 streets_analyzed$cluster <- as.factor(kmeans_result$cluster)
@@ -152,6 +188,7 @@ cluster_summary <- streets_analyzed |>
     across(c(choice_score, surface_temp, dist_to_green, dist_to_blue),
            list(
              mean = ~mean(., na.rm = TRUE),
+             median = ~median(., na.rm = TRUE),
              min  = ~min(., na.rm = TRUE),
              max  = ~max(., na.rm = TRUE)
            ),
@@ -161,7 +198,6 @@ cluster_summary <- streets_analyzed |>
 
 print("=== Cluster Profiling Table ===")
 print(cluster_summary)
-
 
 # ========================================================
 # 4. Plotting & Exporting
@@ -330,19 +366,6 @@ message("Pipeline complete! All processes done. Yay!")
 # ========================================================
 # TESTING OUTPUTS (DELETE LATER)
 # ========================================================
-
-message("> Cluster Means")
-
-cluster_summary |>
-  select(
-    cluster,
-    choice_score_mean,
-    surface_temp_mean,
-    dist_to_green_mean,
-    dist_to_blue_mean
-  ) |>
-  print()
-
 message("> Cluster Sizes")
 
 streets_analyzed |>
@@ -352,21 +375,3 @@ streets_analyzed |>
     percent = round(n / sum(n) * 100, 1)
   ) |>
   print()
-
-cluster_summary |>
-  select(
-    cluster,
-    choice_score_min,
-    choice_score_max,
-    surface_temp_min,
-    surface_temp_max,
-    )
-
-cluster_summary |>
-  select(
-    cluster,
-    dist_to_green_min,
-    dist_to_green_max,
-    dist_to_blue_min,
-    dist_to_blue_max
-  )
