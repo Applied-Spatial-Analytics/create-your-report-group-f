@@ -1,0 +1,5 @@
+"cluster","choice_score_mean","choice_score_median","choice_score_min","choice_score_max","surface_temp_mean","surface_temp_median","surface_temp_min","surface_temp_max","dist_to_green_mean","dist_to_green_median","dist_to_green_min","dist_to_green_max","dist_to_blue_mean","dist_to_blue_median","dist_to_blue_min","dist_to_blue_max"
+"1",36521.31,16950.33,1,230188.72,37.59,37.5,36.55,40.7,179.74,159.06,0,603.74,320.76,320.33,0,734.57
+"2",75097.71,27575.32,2010.51,575919.02,35.8,35.82,34.64,36.79,121.3,66.67,0,649.36,243.22,207.4,0,789.67
+"3",2.7,1,1,15,34.36,33.86,30.84,37.45,112.72,0,0,482.23,202.17,60.36,0.38,748.57
+"4",83359.47,25905.81,1776.41,617351.39,33.63,33.88,30.95,34.73,79.9,17.15,0,502.43,137.63,59.8,0,599.38
