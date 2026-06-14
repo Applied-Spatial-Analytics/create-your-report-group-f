@@ -7,19 +7,19 @@ library(cowplot)
 library(ggplot2)
 library(dplyr)
 library(plotly)
-
+library(here)
 # ========================================================
 # 0. Configuration
 # ========================================================
-CITY_NAME     <- "xian"   # "xian" or "delft"
-PROJECTED_CRS <- 32649    # Xian: 32649, Delft: 28992
+CITY_NAME     <- "delft"   # "xian" or "delft"
+PROJECTED_CRS <- 28992    # Xian: 32649, Delft: 28992
 OUTPUT_DIR    <- "output/"
 
-PATH_STREETS_IN <- paste0("data/", CITY_NAME, "_network_neat.gpkg")
-PATH_COINS_IN <- paste0("data/", CITY_NAME, "_network_coins.gpkg")
-PATH_RASTER_IN  <- paste0("data/", CITY_NAME, "_landsat.tif")
-PATH_GREEN_IN   <- paste0("data/", CITY_NAME, "_green.geojson")
-PATH_BLUE_IN    <- paste0("data/", CITY_NAME, "_blue.geojson")
+PATH_STREETS_IN <- here("scripts", "data", paste0(CITY_NAME, "_network_neat.gpkg"))
+PATH_COINS_IN   <- here("scripts", "data", paste0(CITY_NAME, "_network_coins.gpkg"))
+PATH_RASTER_IN  <- here("scripts", "data", paste0(CITY_NAME, "_landsat.tif"))
+PATH_GREEN_IN   <- here("scripts", "data", paste0(CITY_NAME, "_green.geojson"))
+PATH_BLUE_IN    <- here("scripts", "data", paste0(CITY_NAME, "_blue.geojson"))
 
 
 # ========================================================
@@ -94,13 +94,13 @@ intersected <- st_intersection(coins_net, streets_analyzed)
 intersected$overlap_length <- as.numeric(st_length(intersected))
 
 # Aggregate variables for each COINS segment using a Length-Weighted Mean.
-# We group the data by 'coins_id' and apply 'overlap_length' as the weight, 
+# We group the data by 'coins_id' and apply 'overlap_length' as the weight,
 # ensuring that longer overlapping raw segments contribute proportionally more to the final value.
 aggregated_coins <- intersected |>
   st_drop_geometry() |>
   group_by(coins_id) |>
   summarise(
-    choice_score  = weighted.mean(choice_score, overlap_length, na.rm = TRUE),
+    choice_score  = max(choice_score, na.rm = TRUE),
     surface_temp  = weighted.mean(surface_temp, overlap_length, na.rm = TRUE),
     dist_to_green = weighted.mean(dist_to_green, overlap_length, na.rm = TRUE),
     dist_to_blue  = weighted.mean(dist_to_blue, overlap_length, na.rm = TRUE)
@@ -111,7 +111,7 @@ streets_coins_analyzed <- coins_net |>
   left_join(aggregated_coins, by = "coins_id")
 
 # Create an output file
-st_write(streets_coins_analyzed, paste0("data/", CITY_NAME, "_variables.gpkg"), delete_dsn = TRUE, quiet = TRUE)
+st_write(streets_coins_analyzed, here("scripts", "data", paste0(CITY_NAME, "_variables.gpkg")), delete_dsn = TRUE, quiet = TRUE)
 
 # ========================================================
 # 4. K-Means Clustering (on Aggregated COINS Network)
@@ -119,7 +119,7 @@ st_write(streets_coins_analyzed, paste0("data/", CITY_NAME, "_variables.gpkg"), 
 message("Loading aggregated COINS network for clustering...")
 
 # Read CITY_variables.gpkg
-streets_analyzed <- st_read(paste0("data/", CITY_NAME, "_variables.gpkg"), quiet = TRUE)
+streets_analyzed <- st_read(here("scripts", "data", paste0(CITY_NAME, "_variables.gpkg")), quiet = TRUE)
 
 message("Preparing feature matrix for clustering...")
 
@@ -153,7 +153,7 @@ k_values <- 2:9
 message("Calculating elbow curve...")
 for (k in k_values) {
   km <- kmeans(X_weighted, centers = k, nstart = 20)
-  
+
   # # tot.withinss = Total Within-Cluster Sum of Squares
   # This measures how compact the clusters are: lower is better.
   inertia <- c(inertia, km$tot.withinss)
@@ -202,7 +202,7 @@ print("=== Cluster Profiling Table ===")
 print(cluster_summary)
 
 # ========================================================
-# 4. Plotting & Exporting
+# 5. Plotting & Exporting
 # ========================================================
 # Output 1. Clustered map (gpkg)
 message("> (1) Clustered map (gpkg)")
@@ -299,26 +299,33 @@ cluster_means <- streets_analyzed |>
   st_drop_geometry() |>
   group_by(cluster) |>
   summarise(
-    choice_score = mean(choice_score, na.rm = TRUE),
-    surface_temp = mean(surface_temp, na.rm = TRUE),
+    choice_score  = mean(log1p(choice_score), na.rm = TRUE), # MATCH: log-transformed means
+    surface_temp  = mean(surface_temp, na.rm = TRUE),
     dist_to_green = mean(dist_to_green, na.rm = TRUE),
-    dist_to_blue = mean(dist_to_blue, na.rm = TRUE)
+    dist_to_blue  = mean(dist_to_blue, na.rm = TRUE)
   ) |>
   mutate(cluster_num = as.numeric(as.character(cluster)))
 
-# Set range for each axes
-raw_data <- st_drop_geometry(streets_analyzed)
+# Set range for each axes and apply log transform to match
+raw_data <- st_drop_geometry(streets_analyzed) |>
+  mutate(choice_score = log1p(choice_score))
 
 par_coord_plot_avg <- plot_ly(type = 'parcoords',
                               data = cluster_means,
                               line = list(
                                 color = ~cluster_num,
-                                colorscale = list(c(0, '#65C3A1'), c(0.33, '#FC9964'), c(0.66, '#869DC5'), c(1, '#E597C0')),
-                                width = 4
+                                # Explicitly define hard stops for discrete cluster coloring
+                                colorscale = list(
+                                  list(0.00, '#65C3A1'), list(0.25, '#65C3A1'),  # Cluster 1
+                                  list(0.25, '#FC9964'), list(0.50, '#FC9964'),  # Cluster 2
+                                  list(0.50, '#869DC5'), list(0.75, '#869DC5'),  # Cluster 3
+                                  list(0.75, '#E597C0'), list(1.00, '#E597C0')   # Cluster 4
+                                ),
+                                width = 5
                               ),
                               dimensions = list(
                                 list(range = c(min(raw_data$choice_score, na.rm=T), max(raw_data$choice_score, na.rm=T)),
-                                     label = 'Avg Popularity', values = ~choice_score),
+                                     label = 'Avg Popularity (Log)', values = ~choice_score),
                                 list(range = c(min(raw_data$surface_temp, na.rm=T), max(raw_data$surface_temp, na.rm=T)),
                                      label = 'Avg Surface Temp (°C)', values = ~surface_temp),
                                 list(range = c(min(raw_data$dist_to_green, na.rm=T), max(raw_data$dist_to_green, na.rm=T)),
@@ -327,7 +334,10 @@ par_coord_plot_avg <- plot_ly(type = 'parcoords',
                                      label = 'Avg Dist to Blue (m)', values = ~dist_to_blue)
                               )
 ) %>%
-  layout(title = "Cluster Profiles: Average Values")
+  layout(
+    title = "Cluster Profiles: Average Values",
+    margin = list(b = 60) # Adds padding at the bottom so labels do not cut off
+  )
 
 par_coord_plot_avg
 
