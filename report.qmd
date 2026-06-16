@@ -48,6 +48,8 @@ and start the report from the Introduction section below.
 :::
 
 ## Introduction
+This report outlines an automated pipeline implemented in R and Python to analyze the intersection of street network centrality (spatial popularity), microclimate (Land Surface Temperature), and proximity to green and blue infrastructure. After the relevant datasets are preprocessed, cluster analysis is used to categorize street segments based on the four aforementioned variables. The aim is to describe which streets should be prioritized for the implementation of thermal comfort related nature based solutions (NBS) by identifying streets with high popularity and low thermal comfort. The two study cases presented in this report are the historic centers of the cities of Delft (Netherlands) and Xi’an (China). 
+
 
 ## Methods
 
