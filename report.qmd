@@ -1,6 +1,6 @@
 ---
-title: "Title of your report"
-subtitle: "Project report of Group #"
+title: "Thermal Comfort in the Historic Core"
+subtitle: "A Comparative Network Analysis of Delft and Xi’an"
 author:
   - name: "Chaeyeon Moon"
     affiliation: "MSc Geomatics"
@@ -11,55 +11,272 @@ author:
   - name: "Prianka Girish Bali"
     affiliation: "MSc Urbanism"
 format: html
+bibliography: report_files/references.bib
 ---
 
-::: callout
-## This is a computational notebook
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this 
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
-
-You can delete this entire callout between and including the lines
-```
-::: callout
-```
-and
-
-```
-:::
-```
-and start the report from the Introduction section below.
-:::
-
 ## Introduction
-This report outlines an automated pipeline implemented in R and Python to analyze the intersection of street network centrality (spatial popularity), microclimate (Land Surface Temperature), and proximity to green and blue infrastructure. After the relevant datasets are preprocessed, cluster analysis is used to categorize street segments based on the four aforementioned variables. The aim is to describe which streets should be prioritized for the implementation of thermal comfort related nature based solutions (NBS) by identifying streets with high popularity and low thermal comfort. The two study cases presented in this report are the historic centers of the cities of Delft (Netherlands) and Xi’an (China). 
+### Context
+Cities around the world are experiencing increasingly severe impacts from climate change ranging from more frequent and intense heatwaves, changing precipitation patterns, and a growing number of extreme weather events that threaten the resilience and livability of urban environments. Historic Urban Landscapes (HULs) face additional pressures due to rapid urbanization and the need to protect and conserve cultural heritage. Rising temperatures, more frequent extreme weather events, and changing hydrological conditions are putting HULs under increasing environmental stress while simultaneously threatening the cultural, spatial and social values that define them [@united_nations_educational_scientific_and_cultural_organization_new_2013; @noauthor_climate_nodate]. Unlike recently developed urban areas, historic city centers have limited opportunities for large scale physical interventions due to the existing urban morphology and protected heritage assets.
 
+Responding to these challenges, the PAST-FORWARD (Preserving & Adapting Spatial Transformations toward Future-Oriented Resilient Development) project, a collaborative initiative between researchers from Netherlands and China, aims to develop climate-adaptive strategies for HULs. By combining geospatial analysis, landscape-based urban design, governance and stakeholder participation, the project aims to translate research into evidence based planning approaches that strengthen urban resilience while safeguarding cultural heritage. Through living laboratories in Delft, Rotterdam, Xi'an and Guangzhou, PAST-FORWARD investigates how climate adaptation strategies can be designed, tested and implemented across different urban and governance contexts. 
+
+
+### Heat in Historic Urban Landscapes
+In Historic Urban Landscapes, urban heat has emerged as one of the more pressing concerns. Increasing temperatures and more frequent heatwaves have intensified the Urban Heat Island (UHI) effect where dense environments experience significantly higher temperatures than their surrounding rural areas [@santamouris_recent_2020]. Historic city centers are particularly susceptible to this phenomenon owing to their compact urban form, extensive impervious surfaces, limited existing vegetation and restricted opportunities for introducing large-scale cooling interventions that amplify heat concentration while limiting potential for adaptation measures [@bartesaghi-koc2020; @cai2019]. These altered micro-climate conditions reduce not just the environmental quality of public spaces but also increase human exposure to thermal stress.
+
+The heritage value of historic city centers extends beyond the buildings. They are the living environments where streets, squares and public spaces support everyday movement, social interactions, economic activity and cultural identity. The consequences of UHI alters these everyday experiences of the city and expose residents and tourists to thermal stress during walking, recreation and social activities.  Thus climate adaptation measures cannnot only focus on the protection of heritage fabric but must also preserve these qualities such that these spaces remain livable, accessible and socially vibrant. As Lenzholzer argues, urban climate should not be understood as just the meteorological phenomenon but also as something that shapes how people perceive, occupy and use urban space [@lenzholzer2025]. Climate adaptation in historic cities thus requires approaches that integrate environmental performance, heritage conservation and human-centred urban design. 
+
+Previous studies have demonstrated that urban morphology, vegetation and water bodies influence local thermal conditions and play vital roles in reducing the urban heat [@bartesaghi-koc2020; @beier2022]. However these environmental characteristics do not exist independently of the ways in which people move and experience the city. Thus, identifying where thermal stress coincides with streets that accommodate high levels of pedestrian movement is therefore essential for prioritizing climate adaptation interventions where they are likely to deliver the greatest public benefit. This challenge provides the basis for the comparative approach adopted in this study.
+
+
+### Case Selection
+This study adopts a comparative case study approach using the historic city centers of Delft (The Netherlands) and Xi'an (China), two participating cities in the PAST-FORWARD living laboratories. While differing considerably in scale (approximately 24.06 km² and 10,097  km², respectively) and climate (mild, temperate maritime and semi-arid continental monsoon respectively), both cities contain well-defined historic cores that function as active centers of movement, tourism and public life. Their cultural significance and ongoing need to adapt to climate change make them representative examples for this study.
+
+The two cities present contrasting urban morphologies. Delft developed as a compact medieval canal city is characterized by a fine-grain street network. On the other hand, Xi'an retains a large orthogonal street network enclosed within its historic city walls. These differences influence their spatial distribution of movement, vegetation and ultimately urban heat, providing an opportunity to examine how similar climate adaptation challenges manifest under contrasting urban conditions.
+
+By analyzing Delft and Xi'an using a common spatial analytical framework, this study investigates whether comparable street typologies and climate adaptation priorities emerge despite their differing physical and climatic conditions. The comparison therefore provides insight into both the context specific characteristics as well as patterns that may be transferable across historic urban landscapes.
+
+>Figures of OSM map = same morphology + figure of surface temp raw of city centre vs outside to show high temp core
+
+### Research Questions
+Existing research has demonstrated how urban morphology, vegetation and water bodies influence local thermal conditions in historic cities along with the potential for using nature-based solutions in improving thermal comfort [@bartesaghi-koc2020; @beier2022]. However, translating this knowledge into spatially explicit decision-support tools that identify where climate adaptation interventions should be prioritized remains a challenge. While many studies focus on evaluating thermal conditions or assessing the effectiveness of individual interventions should be prioritized remains a challenge. While many studies focus on evaluating thermal conditions or assessing the effectiveness of individual interventions, comparatively less attention has been given to integrated analytical frameworks that combine thermal stress, pedestrian movement, and access to natural cooling infrastructure to support evidence-based planning, particularly across contrasting historic cities.   
+
+To address this gap, this study investigates the historic city centers of Delft and Xi'an through the following research question:
+
+>
+**How can thermally stressful conditions along important pedestrian streets be identified and prioritized in historic city centers?**
+
+This is explored through the following sub-questions:
+
+>How does thermal comfort vary across pedestrian street segments within the historic city center?
+
+>Which pedestrian streets are structurally important within the urban network? 
+
+>Which pedestrian street segments should be prioritized for heat mitigation interventions based on thermal stress and network importance? 
+
+To answer these, this report develops a reproducible pipeline implemented in R and Python to analyze the intersection of street network centrality (spatial popularity) along with environmental indicators like microclimate (Land Surface Temperature), and proximity to green and blue infrastructure. By identifying the street typologies that combine these charcateristics, the  framework supports the prioritization for the implementation of nature based solutions (NBS) to optimize pedestrian thermal comfort within historic city centers. 
 
 ## Methods
 
-### MCDA
+### Analytical Framework
+The Analytical Framework was designed to operationalize the research questions through a reproducible spatial workflow. Rather than just focusing on evaluating thermal conditions in isolation, the framework integrates indicators representing movement, thermal stress as well as access to natural cooling infrastructure to identity street typologies that can support evidence-based climate adaptation.
+
+The sequence of the workflow begins with the acquisition and pre-processing the relevant datasets for both case studies. Environmental and network-based indicators were then calculated before aggregating to continuous street units. Thereafter, cluster analysis is used to categorize street segments based on the four aforementioned variables. Applying the same workflow to Delft and Xi'an enables a consistent comparison of climate adaptation priorities across contrasting historic city centers.
+
+>Figure of framework
+
+### Data Selection
+Describe datasets = principles guiding their selection
+>Figure original OSM network + Surface temp 
+
+### Study Area Delimitation
+Explain how historic city center was defined
+Why we choose a 500m buffer = pedestrian movement and thermal influences beyond the historic core.
+
+>Figure Delft & Xi'an study area (historic centre) + 500 m buffer
+
+### Unit of Analysis
+use of street segments as the analytical unit
+preprocessing choices = why = create a clean and comparable street network
+why segment-level analysis is the best = 
+>Figure of cleaned network with neatnet(before/after)
+
+### Indicator Selection
+
+#### Angular Choice
+measure of movement potential within the street network
+relevance for identifying streets that are likely to accommodate higher pedestrian activity
+
+#### Land Surface Temperature (LST)
+use of Landsat-derived LST as a proxy for thermal conditions
+advantages, limitations, and its role in representing spatial patterns of urban heat
+
+#### Distance to Green Spaces
+proximity to green infrastructure as an indicator of potential cooling benefits
+why
+
+#### Distance to Blue Spaces
+proximity to water bodies as a complementary indicator of cooling potential
 
 ### Typology construction
 
+#### Data Aggregation
+Why values are aggregated = planning units vs computational units
+>Figure of cleaned network with COINS (before/after)
+
+aggregation logics for each indicator
+
+#### Data Standardization for Clustering
+using z-scores
+why = indicators contribute on a comparable scale despite differing units and ranges
+
+#### Weights to Criterias
+weighting assigned to each variable based on the study objectives
+
+#### Clustering Method Choice
+use of k-means clustering
+why = 
+
+### Reproducibility Assessment
+principles of reproducibility and FAIR data included and how
+
 ## Results
+
+### Angular Choice
+Identify primary movement corridors
+compare promary movement with real condition
+difference in network structure between two 
+
+>Figure Delft & Xi'an choice result
+
+> GE of primary movement corridors
+
+### Surface Temperature
+What is the distribution of thermal conditions
+identify major hotspots and cooler areas
+show what the urban morphology is like around them
+
+>Figure Delft & Xi'an LST result
+
+>GE of hotspots and cooler areas
+
+### Distance to Green Spaces
+highlight ares with limited access to greens
+show they relate to real conditions
+compare the two cities
+
+>Figure Delft & Xi'an result
+
+> GE of low access areas
+
+### Distance to Blue Spaces
+highlight ares with limited access to blues
+show they relate to real conditions
+compare the two cities
+
+>Figure Delft & Xi'an result
+
+> GE of low access areas
+
+### Summary of Indicators
+summary of all indicators
+key similarities and differences between the cities
+
+> Figure of summary of means of all indicators
+
+### Typology construction
+
+#### K-mean Clustering
+why k = 4 based on elbow curve
+
+>Figure of elbow curve
+
+#### Typology Construction 
+impact of weighting on the typologies seen
+
+>Figure Delft & Xi'an tetrahedron
+
+characteristics of each typology wrt movement, thermal stress and environmental indicators
+
+>Typology definition table
+
+compare the spatial distribution in both cities
+
+>Figure Delft & Xi'an result
 
 ## Discussion
 
+### Study Area Delimitation
+the influence of selecting the historic city centre and applying a 500 m buffer on the analysis = made both cases relatively comparable despite their overall variable scales
+500m buffer = reduced edge effects and account for influence from surrounding streets and green spaces that influence the core 
+
+### Unit of Analysis
+streets = where pedestrian experience cities = most meaningful planning unit
+advantage of segment-level = maintain spatial detail but remain comparable between two cities
+Neatnet = improved network consistency
+COINS = better correspond to actual conditions of movement
+
+### Selection of Criterias
+selected criterias relate to each other
+
+examine if high movement potential and high temp actually coincide in both
+compare both cities
+is this what the literature said
+>Figure Delft & Xi'an bivariate map (temp vs choice)
+
+examine how green influences these relationships = green influece on temp and how green could influence choice
+are the cooling effects equal in both cities?
+is this what the literature said
+
+>Figure Delft & Xi'an bivariate map (temp vs dist to green)
+
+>Figure Delft & Xi'an bivariate map (choice vs dist to green)
+
+### Typologies
+Discuss why typologies are the same and which are different
+
+>Figure Delft & Xi'an result
+
+relate representative streets from each typology to their observed urban characteristics using aerial imagery or street-level photographs
+
+>Figure of typology and correspoding case street in delft and xi'an
+
+discuss how the typologies can support the implementation of nature-based solutions= distinguishing between streets that require immediate intervention and those where existing environmental conditions should be preserved
+
+> priority map (line colour corresponds to where you need intervention and where you need preservation)
+
+### Reproducibility
+can workflow be transferable to other historic cities? 
+How did the principles we thought of in methods work
+where is reproducibility failing
+
+## Further Research
+
+### Contributions
+reproducible open-source analytical workflow for identification and prioritization
+integration of temp with both movement and environmental indicators
+application of workflow to two contrasting cities = common workflow can be used to get comparable results and still account for local conditions
+results provide basis for prioritisation and evidence-based climate adaptation interventions
+
+### Limitations
+LST as proxy for pedestrian thermal comfort = no accound for shading, wind, humidity, MRT and their influence on human perception of thermal stress
+30m spatial resolution of Landsat = fine-scale variations of temp missing in narrower streets
+weighting of indicators = more conceptual and not based on stakeholder input = differernt weights is different results
+angular choice = respresents movement potential not actual patterns and activity
+
+### Next Steps
+incorporate pedestrian counts, high resolution data and thermal comfort indices like PET or UTCI
+Account for season variance
+apply to other historic cities = evaluate transferabiltity and robustness accross differnt contexts
+
 ## Conclusion
+Reproducible spatial analytics as bridge between environmental analysis and planning
+
+>How does thermal comfort vary across pedestrian street segments within the historic city center?
+
+thermal conditions not distributed uniformly 
+
+>Which pedestrian streets are structurally important within the urban network? 
+
+clear hierarchy of streets
+streets = representation of spatial importance = identification of streets with large no of people
+
+>Which pedestrian street segments should be prioritized for heat mitigation interventions based on thermal stress and network importance? 
+
+can not prioritise based on thermal conditions only
+high thermal + high pedestrian = most impact = intervene
+cool thermal + high pedestrian = most impact = preserve
+
+>
+**How can thermally stressful conditions along important pedestrian streets be identified and prioritized in historic city centers?**
+
+typology based approach = identifying where nature-based climate adaptation measures are likely to achieve the greatest benefit
+
+application to two contexts = despite substantial differences in morphology and climate, a common analytical framework can support evidence-based climate adaptation
+
+## Group Reflection
+
+## Bibliography
+
+### Literature
 
