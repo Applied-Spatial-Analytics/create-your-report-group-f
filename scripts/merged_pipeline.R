@@ -14,8 +14,8 @@ library(stringr)
 # ========================================================
 # 0. Configuration
 # ========================================================
-CITY_NAME     <- "Xian"   # "xian" or "delft"
-PROJECTED_CRS <- 32649    # Xian: 32649, Delft: 28992
+CITY_NAME     <- "Delft"   # "xian" or "delft"
+PROJECTED_CRS <- 28992    # Xian: 32649, Delft: 28992
 OUTPUT_DIR    <- "output/"
 
 PATH_STREETS_IN <- here("scripts", "data", paste0(CITY_NAME, "_network_neat.gpkg"))
@@ -242,6 +242,84 @@ cluster_map <- ggplot() +
     plot.margin = margin(15,20,15,15))
 
 ggsave(paste0(OUTPUT_DIR, CITY_NAME, "_clustered.png"), cluster_map, width = 11, height = 8, dpi = 600, bg = "transparent")
+
+# Output 2-B. Individual Cluster Typology Maps (Separate Files with Transparent Backgrounds)
+message("> (2-B) Generating separate transparent typology maps...")
+
+# Create a master baseline network layer (all grey)
+background_network <- streets_analyzed |> st_drop_geometry()
+
+# Define clear titles for your final report layout
+profile_titles <- c(
+  "1" = "Profile 1 - Quiet Parkside Pathways",
+  "2" = "Profile 2 - Gray Infrastructure Heat Corridors",
+  "3" = "Profile 3 - Busy Commercial Spines",
+  "4" = "Profile 4 - Strategic Eco-Avenues"
+)
+
+# Loop through each cluster and generate a standalone map
+for (current_cluster in c("1", "2", "3", "4")) {
+  message(paste0("  >> Rendering separate transparent map for Cluster ", current_cluster, "..."))
+
+  # Filter the active layer to contain only the current cluster
+  active_cluster_data <- streets_analyzed |>
+    filter(cluster == current_cluster)
+
+  # Fetch the specific hex color code assigned to this typology
+  active_color <- cluster_colors[current_cluster]
+
+  # Build the isolated map
+  isolated_map <- ggplot() +
+    # 1. Base Layer: The entire city network drawn in a muted background grey
+    geom_sf(data = streets_analyzed, color = "#e2e8f0", size = 0.4) +
+
+    # 2. Top Layer: Only the current cluster elements highlighted in their true tone
+    geom_sf(data = active_cluster_data, color = active_color, size = 0.7) +
+
+    # 3. Priyanka's bounding box constraints to maintain cross-map alignment
+    coord_sf(
+      xlim = c(map_bbox["xmin"] - xpad, map_bbox["xmax"] + xpad),
+      ylim = c(map_bbox["ymin"] - ypad, map_bbox["ymax"] + ypad),
+      expand = FALSE
+    ) +
+
+    # 4. Professional presentation typography and titles
+    labs(
+      #title = profile_titles[current_cluster],
+      subtitle = paste("Isolated typology network overlay | City of", toupper(CITY_NAME)),
+      x = NULL, y = NULL
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(size = 18, face = "bold", hjust = 0.0, margin = margin(b = 5)),
+      plot.subtitle = element_text(size = 11, face = "italic", hjust = 0.0, colour = "grey40", margin = margin(b = 15)),
+      axis.title = element_blank(),
+      axis.text = element_text(size = 10, colour = "grey30"),
+      panel.grid.major = element_line(colour = "grey75", linewidth = 0.35, linetype = "dashed"),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank(),
+      plot.margin = margin(20, 20, 20, 20),
+
+      # FIXED: Force the internal canvas and overall plot background to be invisible/empty
+      panel.background = element_blank(),
+      plot.background = element_blank()
+    )
+
+  # Define the distinct file path for each profile
+  output_filename <- file.path(OUTPUT_DIR, paste0(CITY_NAME, "_typology_cluster_", current_cluster, ".png"))
+
+  # Save the file with a completely transparent alpha channel canvas
+  ggsave(
+    filename = output_filename,
+    plot = isolated_map,
+    width = 11, height = 8, dpi = 600,
+    bg = "white"
+  )
+}
+
+message("Separate transparent cluster assets successfully generated and exported!")
+
+
 
 # Output 3. Cluster plot - 3D Tetrahedron
 message("> (3) Cluster plot - 3D Tetrahedron")
