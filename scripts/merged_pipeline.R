@@ -8,11 +8,14 @@ library(ggplot2)
 library(dplyr)
 library(plotly)
 library(here)
+library(ggspatial)
+library(stringr)
+
 # ========================================================
 # 0. Configuration
 # ========================================================
-CITY_NAME     <- "delft"   # "xian" or "delft"
-PROJECTED_CRS <- 28992    # Xian: 32649, Delft: 28992
+CITY_NAME     <- "Xian"   # "xian" or "delft"
+PROJECTED_CRS <- 32649    # Xian: 32649, Delft: 28992
 OUTPUT_DIR    <- "output/"
 
 PATH_STREETS_IN <- here("scripts", "data", paste0(CITY_NAME, "_network_neat.gpkg"))
@@ -204,6 +207,8 @@ print(cluster_summary)
 # ========================================================
 # 5. Plotting & Exporting
 # ========================================================
+map_bbox <- st_bbox(streets_analyzed)
+
 # Output 1. Clustered map (gpkg)
 message("> (1) Clustered map (gpkg)")
 
@@ -214,14 +219,29 @@ message("> (2) Clustering result (png)")
 
 cluster_colors <- c("1" = "#65C3A1", "2" = "#FC9964", "3" = "#869DC5", "4" = "#E597C0")
 
+xpad <- diff(c(map_bbox["xmin"], map_bbox["xmax"])) * 0.03
+ypad <- diff(c(map_bbox["ymin"], map_bbox["ymax"])) * 0.03
+
 cluster_map <- ggplot() +
   geom_sf(data = streets_analyzed, aes(color = cluster), size = 0.6) +
   scale_color_manual(values = cluster_colors, name = "Cluster Profile") +
-  theme_void() +
-  labs(title = paste("Spatial Distribution of Clusters:", toupper(CITY_NAME))) +
-  theme(plot.title = element_text(face = "bold", hjust = 0.5, margin = margin(b = 10)))
+  coord_sf(xlim = c(map_bbox["xmin"] - xpad, map_bbox["xmax"] + xpad), ylim = c(map_bbox["ymin"] - ypad,
+             map_bbox["ymax"] + ypad), expand = FALSE) +
+  labs(title = paste("Spatial Distribution of Clusters:", toupper(CITY_NAME)), x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 20,face = "bold",hjust = 0.5,margin = margin(b = 15)),
+       axis.title = element_text(size = 12,vface = "bold"),
+       axis.text = element_text(size = 10,colour = "grey20"),
+      panel.grid.major = element_line(colour = "grey75",linewidth = 0.35,linetype = "dashed"),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank(),
+      legend.position = "right",
+    legend.justification = "bottom",
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10),
+    plot.margin = margin(15,20,15,15))
 
-ggsave(paste0(OUTPUT_DIR, CITY_NAME, "_clustered.png"), cluster_map, width = 10, height = 8, dpi = 300, bg = "white")
+ggsave(paste0(OUTPUT_DIR, CITY_NAME, "_clustered.png"), cluster_map, width = 11, height = 8, dpi = 600, bg = "transparent")
 
 # Output 3. Cluster plot - 3D Tetrahedron
 message("> (3) Cluster plot - 3D Tetrahedron")
@@ -354,10 +374,23 @@ choice_plot <- ggplot() +
   geom_sf(data = streets_analyzed, aes(color = choice_score, size = choice_score), show.legend = "legend") +
   scale_color_viridis_c(option = "plasma", name = "Pedestrian\nFlow Potential", labels = scales::label_comma()) +
   scale_size_continuous(range = c(0.3, 1.8), guide = "none") +
-  theme_void() +
-  theme(legend.title = element_text(size = 11, face = "bold"), legend.text = element_text(size = 10))
+  labs(title = paste("Pedestrian Choice:", toupper(CITY_NAME)), x = NULL, y = NULL) +
+  coord_sf(xlim = c(map_bbox["xmin"] - xpad, map_bbox["xmax"] + xpad),ylim = c(map_bbox["ymin"] - ypad, map_bbox["ymax"] + ypad), expand = FALSE) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 20, face = "bold", hjust = 0.5, margin = margin(b = 15)),
+        axis.title = element_blank(),
+        axis.text = element_text(size = 10, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey75", linewidth = 0.35, linetype = "dashed"),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_blank(),
+        legend.position = "right",
+        legend.justification = "bottom",
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10),
+        plot.margin = margin(15, 20, 15, 15))
 
-ggsave(filename = paste0(OUTPUT_DIR, "pedestrian_choice_", CITY_NAME, ".png"), plot = choice_plot, bg = "transparent", width = 10, height = 8, dpi = 300)
+ggsave(filename = paste0(OUTPUT_DIR, "pedestrian_choice_", CITY_NAME, ".png"), plot = choice_plot, bg = "transparent", width = 11, height = 8, dpi = 600)
 
 # Output 7. Bivariate Map (Network popularity vs Temp)
 message("> (7) Bivariate Map (Network popularity vs Temp)")
@@ -366,10 +399,29 @@ bivariate_matrix <- bi_class(streets_analyzed, x = choice_score, y = surface_tem
 map_canvas <- ggplot() +
   geom_sf(data = bivariate_matrix, aes(color = bi_class), size = 0.5, show.legend = FALSE) +
   bi_scale_color(pal = "DkBlue", dim = 3) +
-  theme_void()
+  labs(title = paste("Bivariate Map of Temperature & Choice:", toupper(CITY_NAME)), x = NULL, y = NULL) +
+  coord_sf(xlim = c(map_bbox["xmin"] - xpad, map_bbox["xmax"] + xpad),ylim = c(map_bbox["ymin"] - ypad, map_bbox["ymax"] + ypad), expand = FALSE) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 20, face = "bold", hjust = 0.5, margin = margin(b = 15)),
+        axis.title = element_blank(),
+        axis.text = element_text(size = 10, colour = "grey20"),
+        panel.grid.major = element_line(colour = "grey75", linewidth = 0.35, linetype = "dashed"),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_blank(),
+        legend.position = "right",
+        legend.justification = "bottom",
+        legend.title = element_text(size = 12, face = "bold"),
+        legend.text = element_text(size = 10),
+        plot.margin = margin(15, 20, 15, 15))
 
-final_composite_output <- ggdraw() + draw_plot(map_canvas, 0, 0, 1, 1)
-ggsave(filename = paste0(OUTPUT_DIR, CITY_NAME, "_bivariate_map.png"), plot = final_composite_output, width = 10, height = 8, dpi = 300)
+bi_legend_plot <- bi_legend(pal = "DkBlue", dim = 3,xlab = "Pedestrian Choice",ylab = "Surface Temperature",size = 8)
+
+bi_legend_plot
+
+final_composite_output <- ggdraw() + draw_plot(map_canvas, x = 0, y = 0, width = 0.83, height = 1) +
+  draw_plot(bi_legend_plot, x = 0.84, y = 0.18, width = 0.14, height = 0.24)
+ggsave(filename = paste0(OUTPUT_DIR, CITY_NAME, "_bivariate_map.png"), plot = final_composite_output, width = 11, height = 8, dpi = 600)
 
 
 message("Pipeline complete! All processes done. Yay!")
@@ -418,3 +470,4 @@ cluster_summary |>
     dist_to_blue_min,
     dist_to_blue_max
   )
+
