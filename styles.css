@@ -1,0 +1,205 @@
+/* ---------- Page ---------- */
+
+body {
+    font-family: "Aptos", sans-serif;
+    font-size: 17px;
+    line-height: 1.75;
+    color: #303030;
+}
+
+/* ---------- Main Content ---------- */
+
+main.content {
+    max-width: 1150px;
+}
+
+/* ---------- Title ---------- */
+
+.quarto-title-block .title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #004A2E;
+}
+
+.quarto-title-block .subtitle {
+    font-size: 1.25rem;
+    color: #95b8a0;
+    margin-top: 0.4rem;
+}
+
+.quarto-title-meta {
+    font-size: 0.95rem;
+}
+
+/* ---------- Headings ---------- */
+h1, h2, h3, h4, h5, h6 { font-family: "Aptos", sans-serif; }
+
+h1 {
+    color: #004A2E;
+    font-weight: 700;
+    margin-top: 2.8rem;
+    margin-bottom: 1rem;
+    border-bottom: 3px solid #004A2E;
+    padding-bottom: 0.3rem;
+}
+
+h2 {
+    color: #2f6d52;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 2.4rem;
+    margin-bottom: 0.8rem;
+}
+
+h3 {
+    color: #6b997f;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 0.6rem;
+}
+
+h4 {
+    color: #444444;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 1.6rem;
+    margin-bottom: 0.4rem;
+}
+
+/* ---------- Paragraphs ---------- */
+
+p {
+    text-align: justify;
+    margin-bottom: 1rem;
+}
+
+/* ---------- Links ---------- */
+
+a {
+    color: #2f6d52;
+}
+
+a:hover {
+    color: #004A2E;
+}
+
+/* ---------- Figures ---------- */
+
+.figure {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.figure img {
+    border-radius: 4px;
+}
+
+.figure-caption,
+figcaption {
+    font-size: 0.92rem;
+    color: #666666;
+    font-style: italic;
+    text-align: center;
+    margin-top: 0.6rem;
+}
+
+/* ---------- Tables ---------- */
+
+table {
+    font-size: 0.95rem;
+}
+
+th {
+    background: #004A2E;
+    color: white;
+}
+
+table caption {
+    caption-side: bottom;
+    color: #666666;
+    font-style: italic;
+}
+
+/* ---------- Blockquotes ---------- */
+
+blockquote {
+    border-left: 5px solid #2f6d52;
+    background: #F5F8F8;
+    padding: 0.8rem 1.2rem;
+    margin: 1.5rem 0;
+    font-size: 1.05rem;
+}
+
+/* ---------- Code ---------- */
+
+pre,
+code {
+    font-size: 0.9rem;
+}
+
+/* ---------- Table of Contents ---------- */
+
+#TOC {
+    font-size: 0.95rem;
+}
+
+#TOC .active {
+    font-weight: 600;
+}
+
+/* ---------- Lists ---------- */
+
+ul,
+ol {
+    margin-bottom: 1rem;
+}
+
+li {
+    margin-bottom: 0.35rem;
+}
+
+/* ---------- Horizontal Rule ---------- */
+
+hr {
+    border: none;
+    border-top: 1px solid #D8D8D8;
+    margin: 3rem 0;
+}
+
+/* ---------- Tab Navigation ---------- */
+
+.nav-tabs {
+    border-bottom: 2px solid #004A2E;
+    margin-bottom: 1rem;
+}
+
+.nav-tabs .nav-link {
+    color: #004A2E;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    background: #F4F7F7;
+    margin-right: 4px;
+    transition: all 0.2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    background: #d9ead3;
+    color: #004A2E;
+}
+
+.nav-tabs .nav-link.active {
+    background: #004A2E;
+    color: white;
+    border: none;
+}
+
+/* ---------- Tab Content ---------- */
+
+.tab-content {
+    border: 1px solid #D9E2E2;
+    border-top: none;
+    padding: 20px;
+    background: white;
+}
