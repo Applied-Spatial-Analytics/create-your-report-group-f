@@ -14,9 +14,9 @@ library(stringr)
 # ========================================================
 # 0. Configuration
 # ========================================================
-CITY_NAME     <- "Delft"   # "xian" or "delft"
-PROJECTED_CRS <- 28992    # Xian: 32649, Delft: 28992
-OUTPUT_DIR    <- "output/"
+CITY_NAME     <- "Xian"   # "Xian" or "Delft"
+PROJECTED_CRS <- 32649    # Xian: 32649, Delft: 28992
+OUTPUT_DIR    <- "output/01_Report/03_Results"
 
 PATH_STREETS_IN <- here("scripts", "data", paste0(CITY_NAME, "_network_neat.gpkg"))
 PATH_COINS_IN   <- here("scripts", "data", paste0(CITY_NAME, "_network_coins.gpkg"))
@@ -179,8 +179,66 @@ message("Starting K-Means Clustering...")
 set.seed(0)
 k <- 4
 
+  # Standardize cluster numbering
+  standardize_clusters <- function(kmeans_result){
+  centers <- as.data.frame(kmeans_result$centers)
+  centers$original_cluster <- seq_len(nrow(centers))
+
+  # Order by the variables that define your interpretation
+  centers <-
+    centers |>
+    dplyr::arrange(
+      dplyr::desc(surface_temp),
+      dplyr::desc(choice_score)
+    )
+
+  centers$new_cluster <- seq_len(nrow(centers))
+  centers |>
+    dplyr::select(
+      original_cluster,
+      new_cluster
+    )
+
+}
+
 kmeans_result <- kmeans(X_weighted, centers = k, nstart = 20)
-streets_analyzed$cluster <- as.factor(kmeans_result$cluster)
+cluster_map <- standardize_clusters(kmeans_result)
+
+streets_analyzed$cluster <-
+
+  cluster_map$new_cluster[
+    match(
+      kmeans_result$cluster,
+      cluster_map$original_cluster
+    )
+  ]
+
+streets_analyzed$cluster <-
+
+  factor(
+    streets_analyzed$cluster,
+    levels = 1:4
+  )
+
+# Final cluster numbering for cross-city comparison
+# Since clustering assigns numbers arbitrarily, we just rearrange the cluster orders to match between the
+#cities to ensure that the pipeline is reproducible and comparable
+
+if (tolower(CITY_NAME) == "xian") {
+
+  cluster_num <- as.integer(as.character(streets_analyzed$cluster))
+
+  # Swap clusters 2 and 3
+  cluster_num[cluster_num == 2] <- 99
+  cluster_num[cluster_num == 3] <- 2
+  cluster_num[cluster_num == 99] <- 3
+
+  streets_analyzed$cluster <- factor(
+    cluster_num,
+    levels = 1:4
+  )
+
+}
 
 # Print results
 message("> Extracting Cluster Summary Statistics...")
@@ -204,9 +262,13 @@ cluster_summary <- streets_analyzed |>
 print("=== Cluster Profiling Table ===")
 print(cluster_summary)
 
+table(streets_analyzed$cluster)
+
 # ========================================================
 # 5. Plotting & Exporting
 # ========================================================
+source("config.R")
+
 map_bbox <- st_bbox(streets_analyzed)
 
 # Output 1. Clustered map (gpkg)
@@ -217,31 +279,19 @@ st_write(streets_analyzed, paste0(OUTPUT_DIR, CITY_NAME, "_clustered.gpkg"), del
 # Output 2. Clustered map (png)
 message("> (2) Clustering result (png)")
 
-cluster_colors <- c("1" = "#65C3A1", "2" = "#FC9964", "3" = "#869DC5", "4" = "#E597C0")
-
-xpad <- diff(c(map_bbox["xmin"], map_bbox["xmax"])) * 0.03
-ypad <- diff(c(map_bbox["ymin"], map_bbox["ymax"])) * 0.03
+cluster_colors <- c("1" = "#C46D5E", "2" = "#62BBC1", "3" = "#7D84B2", "4" = "#E597C0")
 
 cluster_map <- ggplot() +
   geom_sf(data = streets_analyzed, aes(color = cluster), size = 0.6) +
   scale_color_manual(values = cluster_colors, name = "Cluster Profile") +
-  coord_sf(xlim = c(map_bbox["xmin"] - xpad, map_bbox["xmax"] + xpad), ylim = c(map_bbox["ymin"] - ypad,
-             map_bbox["ymax"] + ypad), expand = FALSE) +
+  coord_report(map_bbox) +
   labs(title = paste("Spatial Distribution of Clusters:", toupper(CITY_NAME)), x = NULL, y = NULL) +
-  theme_minimal() +
-  theme(plot.title = element_text(size = 20,face = "bold",hjust = 0.5,margin = margin(b = 15)),
-       axis.title = element_text(size = 12,vface = "bold"),
-       axis.text = element_text(size = 10,colour = "grey20"),
-      panel.grid.major = element_line(colour = "grey75",linewidth = 0.35,linetype = "dashed"),
-      panel.grid.minor = element_blank(),
-      panel.border = element_blank(),
-      legend.position = "right",
-    legend.justification = "bottom",
-    legend.title = element_text(size = 12, face = "bold"),
-    legend.text = element_text(size = 10),
-    plot.margin = margin(15,20,15,15))
+  theme_report()
 
-ggsave(paste0(OUTPUT_DIR, CITY_NAME, "_clustered.png"), cluster_map, width = 11, height = 8, dpi = 600, bg = "transparent")
+export_figure(
+  cluster_map,
+  paste0(CITY_NAME, "_clusters.png")
+)
 
 # Output 2-B. Individual Cluster Typology Maps (Separate Files with Transparent Backgrounds)
 message("> (2-B) Generating separate transparent typology maps...")
@@ -251,10 +301,10 @@ background_network <- streets_analyzed |> st_drop_geometry()
 
 # Define clear titles for your final report layout
 profile_titles <- c(
-  "1" = "Profile 1 - Quiet Parkside Pathways",
-  "2" = "Profile 2 - Gray Infrastructure Heat Corridors",
-  "3" = "Profile 3 - Busy Commercial Spines",
-  "4" = "Profile 4 - Strategic Eco-Avenues"
+  "1" = "Typology A - Function-Driven Hotspots",
+  "2" = "Typology B - Underutilized Comfort Spaces",
+  "3" = "Typology C - Balanced Activity Spaces",
+  "4" = "Typology D - Comfort-Driven Hotspots"
 )
 
 # Loop through each cluster and generate a standalone map
@@ -276,49 +326,33 @@ for (current_cluster in c("1", "2", "3", "4")) {
     # 2. Top Layer: Only the current cluster elements highlighted in their true tone
     geom_sf(data = active_cluster_data, color = active_color, size = 0.7) +
 
-    # 3. Priyanka's bounding box constraints to maintain cross-map alignment
-    coord_sf(
-      xlim = c(map_bbox["xmin"] - xpad, map_bbox["xmax"] + xpad),
-      ylim = c(map_bbox["ymin"] - ypad, map_bbox["ymax"] + ypad),
-      expand = FALSE
-    ) +
+    # 3. Maintain consistent map extent
+    coord_report(map_bbox) +
 
-    # 4. Professional presentation typography and titles
+    # 4. Titles
     labs(
-      #title = profile_titles[current_cluster],
-      subtitle = paste("Isolated typology network overlay | City of", toupper(CITY_NAME)),
-      x = NULL, y = NULL
+      title = profile_titles[current_cluster],
+      subtitle = paste("Highlighted street typology •", toupper(CITY_NAME)),
+      x = NULL,
+      y = NULL
     ) +
-    theme_minimal() +
-    theme(
-      plot.title = element_text(size = 18, face = "bold", hjust = 0.0, margin = margin(b = 5)),
-      plot.subtitle = element_text(size = 11, face = "italic", hjust = 0.0, colour = "grey40", margin = margin(b = 15)),
-      axis.title = element_blank(),
-      axis.text = element_text(size = 10, colour = "grey30"),
-      panel.grid.major = element_line(colour = "grey75", linewidth = 0.35, linetype = "dashed"),
-      panel.grid.minor = element_blank(),
-      panel.border = element_blank(),
-      plot.margin = margin(20, 20, 20, 20),
 
-      # FIXED: Force the internal canvas and overall plot background to be invisible/empty
-      panel.background = element_blank(),
-      plot.background = element_blank()
-    )
+    theme_report()
 
-  # Define the distinct file path for each profile
-  output_filename <- file.path(OUTPUT_DIR, paste0(CITY_NAME, "_typology_cluster_", current_cluster, ".png"))
+  # Define output filename
+  output_filename <- file.path(
+    OUTPUT_DIR,
+    paste0(CITY_NAME, "_typology_", current_cluster, ".png")
+  )
 
-  # Save the file with a completely transparent alpha channel canvas
-  ggsave(
-    filename = output_filename,
+  # Export
+  export_figure(
     plot = isolated_map,
-    width = 11, height = 8, dpi = 600,
-    bg = "white"
+    filename = paste0(CITY_NAME, "_typology_", current_cluster, ".png")
   )
 }
 
 message("Separate transparent cluster assets successfully generated and exported!")
-
 
 
 # Output 3. Cluster plot - 3D Tetrahedron
@@ -356,7 +390,7 @@ edge_y <- c(v1[2],v2[2],NA, v1[2],v3[2],NA, v1[2],v4[2],NA, v2[2],v3[2],NA, v3[2
 edge_z <- c(v1[3],v2[3],NA, v1[3],v3[3],NA, v1[3],v4[3],NA, v2[3],v3[3],NA, v3[3],v4[3],NA, v4[3],v2[3])
 
 # Create Plotly 3D plot
-cluster_colors <- c("1" = "#65C3A1", "2" = "#FC9964", "3" = "#869DC5", "4" = "#E597C0")
+cluster_colors <- c("1" = "#62BBC1", "2" = "#C46D5E", "3" = "#7D84B2", "4" = "#E597C0")
 
 quat_plot <- plot_ly() %>%
   # Add edges (wireframe)
@@ -387,7 +421,10 @@ quat_plot <- plot_ly() %>%
 quat_plot
 
 # [Optional] Save to HTML
-htmlwidgets::saveWidget(quat_plot, file = paste0(OUTPUT_DIR, CITY_NAME, "_cluster_tetrahedron.html"))
+htmlwidgets::saveWidget(
+  quat_plot,
+  file = file.path(OUTPUT_DIR, paste0(CITY_NAME, "_cluster_tetrahedron.html"))
+)
 
 # Output 4. Cluster plot - Parallel Coordinates
 message("> (4) Cluster plot - Parallel Coordinates")
@@ -414,9 +451,9 @@ par_coord_plot_avg <- plot_ly(type = 'parcoords',
                                 color = ~cluster_num,
                                 # Explicitly define hard stops for discrete cluster coloring
                                 colorscale = list(
-                                  list(0.00, '#65C3A1'), list(0.25, '#65C3A1'),  # Cluster 1
-                                  list(0.25, '#FC9964'), list(0.50, '#FC9964'),  # Cluster 2
-                                  list(0.50, '#869DC5'), list(0.75, '#869DC5'),  # Cluster 3
+                                  list(0.00, '#62BBC1'), list(0.25, '#62BBC1'),  # Cluster 1
+                                  list(0.25, '#C46D5E'), list(0.50, '#C46D5E'),  # Cluster 2
+                                  list(0.50, '#7D84B2'), list(0.75, '#7D84B2'),  # Cluster 3
                                   list(0.75, '#E597C0'), list(1.00, '#E597C0')   # Cluster 4
                                 ),
                                 width = 5
@@ -442,7 +479,11 @@ par_coord_plot_avg
 # Output 5. Cluster statistic - CSV (mean, median, max, min)
 message("> (5) Cluster statistic - CSV (mean, median, max, min)")
 
-write.csv(cluster_summary, paste0(OUTPUT_DIR, CITY_NAME, "_cluster_statistic.csv"), row.names = FALSE)
+write.csv(
+  cluster_summary,
+  file.path(OUTPUT_DIR, paste0(CITY_NAME, "_cluster_statistics.csv")),
+  row.names = FALSE
+)
 
 # Output 6. Angular choice plot
 message("> (6) Network popularity plot")
@@ -453,22 +494,12 @@ choice_plot <- ggplot() +
   scale_color_viridis_c(option = "plasma", name = "Pedestrian\nFlow Potential", labels = scales::label_comma()) +
   scale_size_continuous(range = c(0.3, 1.8), guide = "none") +
   labs(title = paste("Pedestrian Choice:", toupper(CITY_NAME)), x = NULL, y = NULL) +
-  coord_sf(xlim = c(map_bbox["xmin"] - xpad, map_bbox["xmax"] + xpad),ylim = c(map_bbox["ymin"] - ypad, map_bbox["ymax"] + ypad), expand = FALSE) +
-  theme_minimal() +
-  theme(plot.title = element_text(size = 20, face = "bold", hjust = 0.5, margin = margin(b = 15)),
-        axis.title = element_blank(),
-        axis.text = element_text(size = 10, colour = "grey20"),
-        panel.grid.major = element_line(colour = "grey75", linewidth = 0.35, linetype = "dashed"),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        axis.line = element_blank(),
-        legend.position = "right",
-        legend.justification = "bottom",
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 10),
-        plot.margin = margin(15, 20, 15, 15))
-
-ggsave(filename = paste0(OUTPUT_DIR, "pedestrian_choice_", CITY_NAME, ".png"), plot = choice_plot, bg = "transparent", width = 11, height = 8, dpi = 600)
+  coord_report(map_bbox) +
+  theme_report()
+  export_figure(
+    plot = choice_plot,
+    filename = paste0(CITY_NAME, "_pedestrian_choice.png")
+  )
 
 # Output 7. Bivariate Map (Network popularity vs Temp)
 message("> (7) Bivariate Map (Network popularity vs Temp)")
@@ -478,74 +509,75 @@ map_canvas <- ggplot() +
   geom_sf(data = bivariate_matrix, aes(color = bi_class), size = 0.5, show.legend = FALSE) +
   bi_scale_color(pal = "DkBlue", dim = 3) +
   labs(title = paste("Bivariate Map of Temperature & Choice:", toupper(CITY_NAME)), x = NULL, y = NULL) +
-  coord_sf(xlim = c(map_bbox["xmin"] - xpad, map_bbox["xmax"] + xpad),ylim = c(map_bbox["ymin"] - ypad, map_bbox["ymax"] + ypad), expand = FALSE) +
-  theme_minimal() +
-  theme(plot.title = element_text(size = 20, face = "bold", hjust = 0.5, margin = margin(b = 15)),
-        axis.title = element_blank(),
-        axis.text = element_text(size = 10, colour = "grey20"),
-        panel.grid.major = element_line(colour = "grey75", linewidth = 0.35, linetype = "dashed"),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        axis.line = element_blank(),
-        legend.position = "right",
-        legend.justification = "bottom",
-        legend.title = element_text(size = 12, face = "bold"),
-        legend.text = element_text(size = 10),
-        plot.margin = margin(15, 20, 15, 15))
+  coord_report(map_bbox) +
+  theme_report()
 
 bi_legend_plot <- bi_legend(pal = "DkBlue", dim = 3,xlab = "Pedestrian Choice",ylab = "Surface Temperature",size = 8)
 
-bi_legend_plot
-
 final_composite_output <- ggdraw() + draw_plot(map_canvas, x = 0, y = 0, width = 0.83, height = 1) +
   draw_plot(bi_legend_plot, x = 0.84, y = 0.18, width = 0.14, height = 0.24)
-ggsave(filename = paste0(OUTPUT_DIR, CITY_NAME, "_bivariate_map.png"), plot = final_composite_output, width = 11, height = 8, dpi = 600)
 
+export_figure(
+  plot = final_composite_output,
+  filename = paste0(CITY_NAME, "_bivariate_map.png")
+)
+
+# Output 8. Surface Temperature
+message("> (8) Surface Temperature")
+
+temperature_plot <- ggplot() +
+  geom_sf(data = streets_analyzed, color = "#e2e8f0", size = 0.4) +
+  geom_sf(data = streets_analyzed, aes(color = surface_temp, size = surface_temp), show.legend = "legend") +
+  scale_colour_distiller(palette = "YlOrRd",direction = 1,limits = c(25, 40),oob = scales::squish,name = "Surface\nTemperature (°C)") +
+  scale_size_continuous(range = c(0.3, 1.8), guide = "none") +
+  labs(title = paste("Surface Temperature:", toupper(CITY_NAME)), x = NULL, y = NULL) +
+  coord_report(map_bbox) +
+  theme_report()
+  export_figure(
+    plot = temperature_plot,
+    filename = paste0(CITY_NAME, "_surface_temperature.png")
+)
+
+# Output 9. Distance to Green
+  message("> (9) Distance to Green")
+
+  distance_green_plot <-ggplot() +
+
+    geom_sf(data = streets_analyzed,colour = "#e2e8f0",linewidth = 0.4) +
+
+    geom_sf(data = streets_analyzed,aes(colour = dist_to_green,linewidth = dist_to_green),
+            show.legend = TRUE
+    ) +
+
+    scale_colour_distiller(palette = "Greens",direction = -1,name = "Distance to\nGreen") +
+    scale_linewidth_continuous(range = c(0.3, 1.8), guide = "none") +
+    labs(title = paste("Distance to Green:", toupper(CITY_NAME)),x = NULL, y = NULL) +
+    coord_report(map_bbox) +
+    theme_report()
+    export_figure(
+      plot = distance_green_plot,
+      filename = paste0(CITY_NAME, "_distance_to_green.png")
+    )
+
+# Output 10. Distance to Blue
+message("> (10) Distance to Blue")
+
+distance_blue_plot <-ggplot() +
+
+  geom_sf(data = streets_analyzed,colour = "#e2e8f0",linewidth = 0.4) +
+
+  geom_sf(data = streets_analyzed,aes(colour = dist_to_blue,linewidth = dist_to_blue),
+    show.legend = TRUE
+  ) +
+
+  scale_colour_distiller(palette = "Blues",direction = -1,name = "Distance to\nBlue") +
+  scale_linewidth_continuous(range = c(0.3, 1.8), guide = "none") +
+  labs(title = paste("Distance to Blue:", toupper(CITY_NAME)),x = NULL, y = NULL) +
+  coord_report(map_bbox) +
+  theme_report()
+  export_figure(
+    plot = distance_blue_plot,
+    filename = paste0(CITY_NAME, "_distance_to_blue.png")
+  )
 
 message("Pipeline complete! All processes done. Yay!")
-
-
-# ========================================================
-# TESTING OUTPUTS (DELETE LATER)
-# ========================================================
-
-message("> Cluster Means")
-
-cluster_summary |>
-  select(
-    cluster,
-    choice_score_mean,
-    surface_temp_mean,
-    dist_to_green_mean,
-    dist_to_blue_mean
-  ) |>
-  print()
-
-message("> Cluster Sizes")
-
-streets_analyzed |>
-  st_drop_geometry() |>
-  count(cluster) |>
-  mutate(
-    percent = round(n / sum(n) * 100, 1)
-  ) |>
-  print()
-
-cluster_summary |>
-  select(
-    cluster,
-    choice_score_min,
-    choice_score_max,
-    surface_temp_min,
-    surface_temp_max,
-  )
-
-cluster_summary |>
-  select(
-    cluster,
-    dist_to_green_min,
-    dist_to_green_max,
-    dist_to_blue_min,
-    dist_to_blue_max
-  )
-
