@@ -226,7 +226,11 @@ Map showing the Pedestrian Choice for the Historic City Centres of Delft (a) and
 
 ### Surface Temperature
 
-Thermal conditions are captured via Land Surface Temperature (LST), derived from the thermal infrared sensors (TIRS) aboard Landsat 8-9 satellite missions. While LST tracks surface temperature rather than air temperature, it offers a synoptic perspective of localized heat distribution. Its primary role within this workflow is to map spatial anomalies of surface heat accumulation in the urban morphology.
+While LST tracks surface temperature rather than air temperature, it offers a synoptic perspective of localized heat distribution (@fig-temp). Its primary role within this workflow is to map spatial anomalies of surface heat accumulation in the urban morphology.
+
+Delft's surface temperature map reflects a buffered maritime microclimate. Thermal hotspots are small and isolated, occurring on wide perimeter roads or large public squares like the Markt. The inner historic center remains protected due to narrow streets that maximize building shading.
+
+Xi'an exhibits a severe, Urban Heat Island (UHI) effect. Wide asphalt corridors act as major heat sinks, driving localized surface temperatures between 38°C and 43°C. The cool anomalies inside the city walls are restricted to the continuous perimeter park and canal system parallel to the ancient ramparts.
 
 ::: {#fig-temp layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_surface_temperature.png){lightbox="choice"}
@@ -240,7 +244,11 @@ Map showing the Surface Temperature for the Historic City Centres of Delft (a) a
 
 ### Distance to Green Spaces
 
-Proximity to green infrastructure is modeled as the shortest Euclidean distance from the center point of each street segment to the nearest boundary edge of an OpenStreetMap designated urban park or green space. This metric functions as an indicator of potential passive cooling benefits, as vegetated areas actively mitigate localized heat.
+Proximity to green infrastructure is modeled as the shortest Euclidean distance from the center point of each street segment to the nearest boundary edge of an OpenStreetMap designated urban park or green space (@fig-distgreen). This metric functions as an indicator of potential passive cooling benefits, as vegetated areas actively mitigate localized heat.
+
+In Delft, proximity to green spaces is high and evenly distributed. Due to numerous pocket parks, courtyards, and tree paths, most street segments sit within a comfortable walking distance ($< 150\text{m}$) of greenery.
+
+In Xi'an, green access is highly unequal. Streets next to the outer city walls or inner parks have immediate access to greenery. However, deep inside the commercial megablocks, streets are isolated from nature with distances exceeding $500\text{m}$, leaving these dense areas completely without vegetative cooling.
 
 ::: {#fig-distgreen layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_distance_to_green.png){lightbox="choice"}
@@ -256,6 +264,10 @@ Map showing the Distance to Greens for the Historic City Centres of Delft (a) an
 
 Complementing the green metric, Distance to Blue Spaces measures the Euclidean proximity of each segment to the nearest surface water body, such as canals, rivers, or lakes. Water infrastructure actively mitigates localized heat, providing vital cooling and thermal buffering within highly built-up historic urban areas.
 
+In Delft, water access is highly uniform. Canals are deeply integrated into the street network, leaving nearly every inner core segment within $50\text{m}$ to $100\text{m}$ of water infrastructure, which provides widespread cooling potential across the network.
+
+In Xi'an, blue infrastructure is restricted to the outer perimeter. The ancient canal system surrounds the historic core, offering excellent water proximity to streets near the city walls. However, the inner grid lacks water, meaning distances to cooling water elements increase sharply as you move toward the central Bell Tower.
+
 ::: {#fig-distblue layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_distance_to_blue.png){lightbox="choice"}
 
@@ -268,7 +280,7 @@ Map showing the Distance to Blue Network for the Historic City Centres of Delft 
 
 ### Summary of Indicators
 
-summary of all indicators key similarities and differences between the cities
+While regional climates differ, with Xi'an reaching much higher peak temperatures than Delft, the overall spatial patterns are similar (@fig-clustervardistri). In both cities, wide street intersections with little vegetation consistently create matching heat and traffic bottlenecks. This shared pattern provides a clear mathematical baseline for the clustering analysis.
 
 ::: {#fig-clustervardistri layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_cluster_distribution.png){lightbox="choice"}
@@ -282,13 +294,24 @@ Graph showing the Distribution of Clusters across the Variables for the Historic
 
 #### K-mean Clustering
 
-why k = 4 based on elbow curve
+To find the ideal number of typologies, an Elbow Analysis evaluating the Within-Cluster Sum of Squares (WCSS) was run across a range of values. The resulting curve showed a clear inflection point (the "elbow") at $K = 4$. This proves that grouping the street network into four clusters offers the best balance, providing distinct, meaningful profiles without over-complicating the data.
 
 > Figure of elbow curve
 
 #### Typology Construction
 
-impact of weighting on the typologies seen
+By plotting the average values on a parallel coordinates axis, the mathematical clusters can be translated into descriptive urban typologies. Because our manual weighting system prioritized temperature and movement potential, the algorithm identified four distinct street profiles:
+
+| Typology | Cluster ID (Color) | Movement Potential | Surface Temp | Dist to Green | Dist to Blue | Planning Strategy |
+| :--- | :---: | :--- | :--- | :--- | :--- | :--- |
+| **Typology A: Function-Driven Hotspots** | 1 (Purple) | Moderate-High | **Very High (~37.5°C)** | High (Far) | High (Far) | **Immediate Intervention** (Cool pavements, tree planting) |
+| **Typology B: Underutilized Comfort Spaces** | 2 (Orange) | Very Low | **Very Cool (~33.0°C)** | Low (Close) | Low (Close) | **Preservation / Asset Protection** (Prevent development) |
+| **Typology C: Balanced Activity Spaces** | 3 (Green) | **Highest** | Moderate-Warm | Low (Close) | Moderate | **Pedestrian Shade Infrastructure** (Awnings, arcades) |
+| **Typology D: Comfort-Driven Hotspots** | 4 (Pink) | Low | Moderate | Moderate | Moderate | **Passive Monitoring** (Baseline fabric) |
+
+The interactive 3D tetrahedron plots visualize exactly how these profiles separate across multi-dimensional space, showing how each street segment is pulled toward respective environmental and network vertices. 
+
+Mapping these typologies back onto the geographic street grids (@fig-clustermap) exposes how these profiles materialize across different spatial layouts. In **Delft** (@fig-clustermapa), the cool *Typology B* zones are woven throughout internal neighborhood networks, while *Typology A* is restricted to external vehicle bypass lines. In **Xi'an** (@fig-clustermapb), *Typology A* consumes the wide primary commercial axes, cutting straight through the core, while *Typology B* forms a protective, insulated perimeter running exclusively along the base of the city walls.
 
 ::: {center}
 <iframe src="scripts/output/01_Report/03_Results/Delft_cluster_tetrahedron.html" width="100%" height="800" style="border:none;">
