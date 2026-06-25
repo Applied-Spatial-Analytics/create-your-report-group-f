@@ -149,51 +149,53 @@ Historic City Centre boundaries and the 500 m analysis buffer for Delft (a) and 
 
 ### Network Pre-processing
 
-use of street segments as the analytical unit preprocessing choices = why = create a clean and comparable street network why segment-level analysis is the best =
+We selected street segments as our primary analytical unit. Since the administrative boundaries and overall sizes of these two cities are vastly different, comparing them at a city-wide level is difficult. Meanwhile, street segments provide a more consistent baseline for comparison; while street lengths and widths vary across cities, it is observed that this variation is smaller than the gap in their total spatial extents. 
+The initial street data was derived from OpenStreetMap (OSM). As raw OSM data often contains mapping errors, such as duplicates, disconnected lines, and overly fragmented sections, we needed to create a clean dataset. To build continuous segments that closely match how people naturally perceive a single street, we implemented two steps of preprocessing. Firstly, we simplified the network. The Python package ‘Neatnet’ was used to fix basic topology errors and remove dead-end based on a specific length threshold (25m for Xi’an, 10m for Delft). Nextly, the resulting simplified data was used as an input for the network consolidation process. We used the Python package ‘Momepy’, which implements the COINS (Continuity in Street Networks) algorithm. This algorithm evaluates the angles between connecting segments to determine their natural continuity. Based on this natural continuity, smaller fragments are merged into single, continuous paths. 
+Through this preprocessing, we generated two network data, the simplified network and the consolidated network. The simplified network data used for the subsequent step of variable calculation, while the consolidated network data used for variable aggregation. We specifically utilized the simplified (pre-consolidated) network data for variable calculation because the Angular Choice method, which was used to calculate the ‘Movement Potential’ variable, requires fragmented network data. Finally, the consolidated network data was employed during the subsequent clustering step. More details will be discussed in the respective sections.
 
 ![Neat-Net Processing](scripts/output/01_Report/01_Introduction/Neat%20net.png){#fig-processing_neatnet}
 
 ### Variable Calculation
 
-#### Angular Choice
+As aforementioned in Section 1.4, we defined four measurable variables to identify street typologies; Movement Potential, Land Surface Temperature, Distance to Green Space, and Distance to Blue Space. Each variable was calculated using the simplified network data, as described below.
 
-measure of movement potential within the street network relevance for identifying streets that are likely to accommodate higher pedestrian activity
+#### Movement Potential
+
+This variable measures the potential for movement within the street network. It helps identify streets that are likely to accommodate high pedestrian activity. To quantify this, we used the Angular Choice method. This method calculates how many times each street segment falls on the shortest path between all pairs of segments within a specified distance.
 
 #### Land Surface Temperature (LST)
 
-use of Landsat-derived LST as a proxy for thermal conditions advantages, limitations, and its role in representing spatial patterns of urban heat
+This variable acts as a proxy for thermal conditions of the streets. Since it was difficult to find thermal comfort index data covering the same timeframe for both cities, we used raw land surface temperature data from Landsat 8-9 Level-2 collection as an alternative to represent the spatial patterns of urban heat. To map this data to the street segments, we overlaid the street network onto the Landsat raster imagery. Each street segment was then assigned a value by calculating the mean temperature of its intersecting pixels.
 
 #### Distance to Green Spaces
 
-proximity to green infrastructure as an indicator of potential cooling benefits why
+This variable acts as an indicator of potential cooling benefits by measuring the proximity of each street segment to green infrastructure. For each segment, we calculated and assigned the Euclidean distance to the nearest green infrastructure.
 
 #### Distance to Blue Spaces
 
-proximity to water bodies as a complementary indicator of cooling potential
+Similar to the ‘Distance to Green Space’ variable, this measures the proximity of each street segment to blue infrastructure. It was computing using the same Euclidean distance method described above.
 
 ### Data Aggregation & Standardization
 
 #### Data Aggregation
 
-Why values are aggregated = planning units vs computational units
+Since each pre-consolidated street fragment was assigned four distinct variables, we needed to aggregate these values for the final consolidated street segments. First, we identified intersecting fragments by overlaying the simplified (pre-consolidated) network data onto the consolidated network data. Then, the variable values were aggregated for each corresponding consolidated street segment. The specific aggregation method varied depending on the variable; for ‘Movement Potential’, we assigned the maximum value from the overlapping fragments. For the remaining three variables, we calculated a length-weighted mean. This ensures that longer street fragments contribute proportionally more to the final aggregated values. 
 
 ![Analytical Framework](scripts/output/01_Report/01_Introduction/COINS.png){#fig-processing_coins}
 
-aggregation logics for each indicator
+### Clustering & Typology Cosntruction
 
 #### Data Standardization for Clustering
 
-using z-scores why = indicators contribute on a comparable scale despite differing units and ranges
+Before clustering, any missing data for the four variables were replaced with their respective means. We also applied a log transformation to the ‘Movement Potential’ variable to normalize its distribution, as its standard deviation was extremely high that may result in indistinct clusters. Next, all variables were standardized using z-scores. This step is necessary because it ensures that all variables contribute to the clustering process on a comparable scale, despite having entirely different units and numerical ranges.
 
-#### Weights to Criterias
+#### Criteria Weighting
 
-weighting assigned to each variable based on the study objectives
+We applied targeted weights to each standardized variable to align with our research objective: identifying the thermal comfort levels of important urban streets. ‘Land Surface Temperature’ was assigned the highest weight of 2.0, while ‘Movement Potential’ was set to 1.0. Both ‘Distance to Green Space’ and ‘Distance to Blue Space’ were assigned the lowest weight of 0.5. By weighting these variables differently, we ensured that ‘Land Surface Temperature’ and ‘Movement Potential’ were prioritized during clustering and the resulting clusters can be more distinctive in that regard. Finally, these weights were multiplied by the standardized data to finalize the inputs for the clustering model.
 
-### Clustering & Typology Cosntruction
+#### K-means Clustering
 
-#### Clustering Method Choice
-
-use of k-means clustering why =
+We used the K-means clustering algorithm to group the street segments into distinct urban typologies. To determine the optimal number of clusters, we used the Elbow Method. We tested a range of cluster counts (from 2 to 9) and measured how compact the resulting clusters were by calculating the total within-cluster sum of squares. Based on this method, we selected 4 as the optimal number of clusters and executed the clustering model. 
 
 ### Reproducibility of Workflow
 
