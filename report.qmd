@@ -87,7 +87,7 @@ The workflow is organized into six sequential stages: (1) data acquisition, (2) 
 
 The datasets used in this study were selected according to two guiding principles: reproducibility and comparability. First, all datasets were obtained from freely available and open-access sources to ensure that the analytic workflow can be reproduced in different study areas without requiring proprietary data. Second, equivalent datasets were selected for both Delft and Xi'an to enable a consistent comparison between the two. Although, higher-resolution datasets are available for Delft, datasets with comparable spatial characteristics were preferred to maintain methodological consistency between the two cases.
 
-Based on these criterias, four datasets were collected to represent the variables of the analytical framework: the pedestrian network, land surface temperature, green spaces and blue spaces/ Street network data were obtained from PDOK for Delft and OpenStreetMap (OSM) from Xi'an, while land surface temperature was derived from Landsat 8-9 Level-2 imagery for both case studies. Green and blue spaces were extracted from OSM for both Delft and Xi'an.
+Based on these criterias, four datasets were collected to represent the variables of the analytical framework: the pedestrian network, land surface temperature, green spaces and blue spaces. Street network data, green as blue spaces were obtained from OpenStreetMap (OSM) , while land surface temperature was derived from Landsat 8-9 Level-2 imagery. For the LST dataset, the chosen time frame was July of 2025; as July is, on average, the warmest month of the year in both cities.
 
 ::::: panel-tabset
 ## Open Street Maps Data
@@ -198,7 +198,7 @@ We applied targeted weights to each standardized variable to align with our rese
 
 #### K-means Clustering
 
-We used the K-means clustering algorithm to group the street segments into distinct urban typologies. To determine the optimal number of clusters, we used the Elbow Method. We tested a range of cluster counts (from 2 to 9) and measured how compact the resulting clusters were by calculating the total within-cluster sum of squares. Based on this method, we selected 4 as the optimal number of clusters and executed the clustering model.
+We used the K-means clustering algorithm to group the street segments into distinct urban typologies. To find the ideal number of typologies, an Elbow Analysis evaluating the Within-Cluster Sum of Squares (WCSS) was run across a range of values (from 2 to 9). The resulting curve showed a clear inflection point (the "elbow") at $K = 4$. This proves that grouping the street network into four clusters offers the best balance, providing distinct, meaningful profiles without over-complicating the data.
 
 ### Reproducibility of Workflow
 
@@ -282,11 +282,7 @@ While regional climates differ, with Xi'an reaching much higher peak temperature
 Graph showing the Distribution of Clusters across the Variables for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
 
-### Typology construction
-
-#### K-mean Clustering
-
-To find the ideal number of typologies, an Elbow Analysis evaluating the Within-Cluster Sum of Squares (WCSS) was run across a range of values. The resulting curve showed a clear inflection point (the "elbow") at $K = 4$. This proves that grouping the street network into four clusters offers the best balance, providing distinct, meaningful profiles without over-complicating the data.
+### Typologies
 
 #### Typology Construction
 
@@ -309,7 +305,7 @@ Mapping these typologies back onto the geographic street grids exposes how these
 Maps showing the Spatial Distribution of Clusters for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
 
-#### Typologies
+#### Examples of Typologies  
 
 Discuss why typologies are the same and which are different
 
