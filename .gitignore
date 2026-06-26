@@ -4,3 +4,6 @@
 .Ruserdata
 .positai
 .report.html
+/.quarto/
+**/*.quarto_ipynb
+docs/report.html
