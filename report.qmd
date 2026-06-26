@@ -288,8 +288,6 @@ Graph showing the Distribution of Clusters across the Variables for the Historic
 
 To find the ideal number of typologies, an Elbow Analysis evaluating the Within-Cluster Sum of Squares (WCSS) was run across a range of values. The resulting curve showed a clear inflection point (the "elbow") at $K = 4$. This proves that grouping the street network into four clusters offers the best balance, providing distinct, meaningful profiles without over-complicating the data.
 
-> Figure of elbow curve
-
 #### Typology Construction
 
 By plotting the average values on a parallel coordinates axis, the mathematical clusters can be translated into descriptive urban typologies. Because our manual weighting system prioritized temperature and movement potential, the algorithm identified four distinct street profiles:
