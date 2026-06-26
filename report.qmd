@@ -156,7 +156,7 @@ We selected street segments as our primary analytical unit. Since the administra
 | Delft | 84.79 | 120.80 | 42.47% |
 | Xi'an | 294.20 | 366.76 | 24.66% |
 
-: Comparison of street segment average lengths (pre- vs. post-simplification)
+: Comparison of street segment average lengths (pre- vs. post-simplification){#tbl-network_comparison}
 
 ![Network Processing Workflow](scripts/output/01_Report/01_Introduction/preprocess_re.png){#fig-processing_neatnet}
 
