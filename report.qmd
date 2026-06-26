@@ -202,7 +202,13 @@ We used the K-means clustering algorithm to group the street segments into disti
 
 ### Reproducibility of Workflow
 
-To ensure our analysis pipeline is fully reproducible, we designed an automated pipeline. Every phase, including data processing, variable calculation, and clustering, is consistent and repeatable across different study areas. As the script incorporates hard-coded parameters, such as the number of clusters and variable weights, it allows others to audit them based on their research objective and input data.
+To ensure our analysis pipeline is fully reproducible, we designed an automated pipeline in RStudio. Every step, including loading data, cleaning the street networks, calculating distances, standardizing variables, and running the K-Means clustering, is handled completely by code. Important settings like the number of clusters ($K = 4$) and the variable weights are cleanly isolated. This makes it easy for anyone to audit, test, or update the analysis for a different project without relying on manual desktop GIS tools, which are prone to hidden human errors.
+
+Our workflow strictly follows the **FAIR (Findable, Accessible, Interoperable, and Reusable)** data principles to support open science:
+
+- **Findable & Accessible:** Our entire code repository is hosted online using GitHub Classroom. This makes our methodology transparent and fully open-source.
+- **Interoperable:** We use open spatial data formats like GeoPackages (`.gpkg`), GeoJSONs (`.geojson`), and public Landsat GeoTIFFs. These files work seamlessly across R, Python, or regular QGIS software without requiring proprietary formats.
+- **Reusable:** The script separates the general data processing steps from city-specific settings. This means the exact same code pipeline can be reused to analyze and map street typologies in other historic cities around the world.
 
 ## Results
 
@@ -447,7 +453,7 @@ As exposed in the previous sections, this research aimed to create a reproducibl
 
 Firstly, LST data was used as an alternative for pedestrian thermal comfort indexes. It was not possible to obtain the latter during the data collection phase, given the difficulty of finding pre-computed thermal comfort data and, alternatively, the necessary datasets typically used in that computation. As an example, the Universal Thermal Climate Index (UTCI) demands data about air temperature, humidity, wind speed and Mean Radiance Temperature. While some of those datasets were available for Delft, they were not available for Xi’an; in order to respect the pre-established criteria of selecting datasets compatible for the two cities, the LST dataset was chosen instead. It must be noted, however, that it does not fully substitute the use of multivariable indexes for a more realistic portrayal of pedestrian thermal comfort.
 
-Additionally, the Landsat 8-9 Level-2 grid dataset contains a spatial resolution of 30 meters; it is thus incapable of representing fine-scale variations of temperature. This specially limiting for the chosen unit of analysis, street segments, as different morphological aspects between neighboring segments may lead to significant differences in their temperature. 
+Additionally, the Landsat 8-9 Level-2 grid dataset contains a spatial resolution of 30 meters; it is thus incapable of representing fine-scale variations of temperature. This specially limiting for the chosen unit of analysis, street segments, as different morphological aspects between neighboring segments may lead to significant differences in their temperature.
 
 The angular choice method used for computing potential for movement also represents a limitation. The algorithm bases its results solely on the geometry of the networks; it does not account for any additional factor that might influence pedestrian's choice. This research did not involve supplementary studies of actual trends and behavior patterns within pedestrian transit in the two cities. Thus, it must be recognized that the potential for movement data cannot confidently reproduce the concrete conditions of pedestrian activity nor of street segment relevance within the network.
 
