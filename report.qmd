@@ -65,11 +65,11 @@ Existing research has demonstrated how urban morphology, vegetation and water bo
 
 To address this gap, this study investigates the historic city centers of Delft and Xi'an through the following research questions:
 
-![Research Questions](scripts/output/01_Report/01_Introduction/Research Questions.png){#fig-research_ques}
+![Research Questions](scripts/output/01_Report/01_Introduction/Research%20Questions.png){#fig-research_ques}
 
 To answer these research questions, each is operationalized into four measurable spatial variables: Movement Potential, representing street network importance through Angular Choice; Land Surface Temperature, capturing thermal conditions; and Distance to Green Space and Distance to Blue Space, characterizing the availability of natural cooling resources. Together, these variables form a reproducible analytical framework that identifies street typologies based on movement, heat exposure, and access to cooling infrastructure. The resulting framework supports the prioritization of pedestrian streets for the implementation of nature-based solutions (NBS), providing an evidence-based approach to optimizing thermal comfort within historic city centers.
 
-![Research Questions with Variables](scripts/output/01_Report/01_Introduction/Research Questions_Variables.png){#fig-research_ques_variable}
+![Research Questions with Variables](scripts/output/01_Report/01_Introduction/Research%20Questions_Variables.png){#fig-research_ques_variable}
 
 ## Methods
 
@@ -77,7 +77,7 @@ To answer these research questions, each is operationalized into four measurable
 
 The analytical framework was developed to operationalize the research questions through a reproducible spatial workflow (@fig-analytical_framework). Rather than evaluating thermal conditions in isolation, the framework integrates indicators of street network importance, thermal stress, and access to natural cooling resources to identify pedestrian street typologies and support evidence-based climate adaptation in historic city centers.
 
-![Analytical Framework](scripts/output/01_Report/01_Introduction/Analytical Framework.png){#fig-analytical_framework}
+![Analytical Framework](scripts/output/01_Report/01_Introduction/Analytical%20Framework.png){#fig-analytical_framework}
 
 The workflow is organized into six sequential stages: (1) data acquisition, (2) network pre-processing, (3) variable calculation, (4) data aggregation and standardization, (5) clustering and typology construction, and (6) climate adaptation prioritization. This structure translates the research questions into measurable spatial variables, combines them into a consistent analytical framework, and ultimately identifies priority street segments for nature-based interventions. Applying the same workflow to both Delft and Xi'an ensures methodological consistency, enabling a direct comparison of street typologies and climate adaptation priorities across two contrasting historic city centers.
 
@@ -149,15 +149,14 @@ Historic City Centre boundaries and the 500 m analysis buffer for Delft (a) and 
 
 ### Network Pre-processing
 
-We selected street segments as our primary analytical unit. Since the administrative boundaries and overall sizes of these two cities are vastly different, comparing them at a city-wide level is difficult. Meanwhile, street segments provide a more consistent baseline for comparison; while street lengths and widths vary across cities, it is observed that this variation is smaller than the gap in their total spatial extents. 
-The initial street data was derived from OpenStreetMap (OSM). As raw OSM data often contains mapping errors, such as duplicates, disconnected lines, and overly fragmented sections, we needed to create a clean dataset. To build continuous segments that closely match how people naturally perceive a single street, we implemented two steps of preprocessing. Firstly, we simplified the network. The Python package ‘Neatnet’ [@fleischmann2026Adaptive] was used to fix basic topology errors and remove dead-end based on a specific length threshold (25m for Xi’an, 10m for Delft). Nextly, the resulting simplified data was used as an input for the network consolidation process. We used the Python package ‘Momepy’ [@fleischmann_2019], which implements the COINS (Continuity in Street Networks) algorithm [@tripathy2021]. This algorithm evaluates the angles between connecting segments to determine their natural continuity. Based on this natural continuity, smaller fragments are merged into single, continuous paths. As detailed in @tbl-network_comparison, the average length of street segments increased by 42.47% for Delft and 24.66% for Xi'an, respectively. 
-Through this preprocessing, we generated two network data, the simplified network and the consolidated network. The simplified network data used for the subsequent step of variable calculation, while the consolidated network data used for variable aggregation. We specifically utilized the simplified (pre-consolidated) network data for variable calculation because the Angular Choice method, which was used to calculate the ‘Movement Potential’ variable, requires fragmented network data. Finally, the consolidated network data was employed during the subsequent clustering step. More details will be discussed in the respective sections.
+We selected street segments as our primary analytical unit. Since the administrative boundaries and overall sizes of these two cities are vastly different, comparing them at a city-wide level is difficult. Meanwhile, street segments provide a more consistent baseline for comparison; while street lengths and widths vary across cities, it is observed that this variation is smaller than the gap in their total spatial extents. The initial street data was derived from OpenStreetMap (OSM). As raw OSM data often contains mapping errors, such as duplicates, disconnected lines, and overly fragmented sections, we needed to create a clean dataset. To build continuous segments that closely match how people naturally perceive a single street, we implemented two steps of preprocessing. Firstly, we simplified the network. The Python package ‘Neatnet’ [@fleischmann2026Adaptive] was used to fix basic topology errors and remove dead-end based on a specific length threshold (25m for Xi’an, 10m for Delft). Nextly, the resulting simplified data was used as an input for the network consolidation process. We used the Python package ‘Momepy’ [@fleischmann_2019], which implements the COINS (Continuity in Street Networks) algorithm [@tripathy2021]. This algorithm evaluates the angles between connecting segments to determine their natural continuity. Based on this natural continuity, smaller fragments are merged into single, continuous paths. As detailed in @tbl-network_comparison, the average length of street segments increased by 42.47% for Delft and 24.66% for Xi'an, respectively. Through this preprocessing, we generated two network data, the simplified network and the consolidated network. The simplified network data used for the subsequent step of variable calculation, while the consolidated network data used for variable aggregation. We specifically utilized the simplified (pre-consolidated) network data for variable calculation because the Angular Choice method, which was used to calculate the ‘Movement Potential’ variable, requires fragmented network data. Finally, the consolidated network data was employed during the subsequent clustering step. More details will be discussed in the respective sections.
 
 | City | Pre-simplified Avg. Length (m) | Post-simplified Avg. Length (m) | Length Increase (%) |
-|------|------|------|------|
+|------------------|------------------|------------------|------------------|
 | Delft | 84.79 | 120.80 | 42.47% |
 | Xi'an | 294.20 | 366.76 | 24.66% |
-: Comparison of street segment average lengths (pre- vs. post-simplification) {#tbl-network_comparison}
+
+: Comparison of street segment average lengths (pre- vs. post-simplification)
 
 ![Network Processing Workflow](scripts/output/01_Report/01_Introduction/preprocess_re.png){#fig-processing_neatnet}
 
@@ -185,7 +184,7 @@ Similar to the ‘Distance to Green Space’ variable, this measures the proximi
 
 #### Data Aggregation
 
-Since each pre-consolidated street fragment was assigned four distinct variables, we needed to aggregate these values for the final consolidated street segments. First, we identified intersecting fragments by overlaying the simplified (pre-consolidated) network data onto the consolidated network data. Then, the variable values were aggregated for each corresponding consolidated street segment. The specific aggregation method varied depending on the variable; for ‘Movement Potential’, we assigned the maximum value from the overlapping fragments. For the remaining three variables, we calculated a length-weighted mean. This ensures that longer street fragments contribute proportionally more to the final aggregated values. 
+Since each pre-consolidated street fragment was assigned four distinct variables, we needed to aggregate these values for the final consolidated street segments. First, we identified intersecting fragments by overlaying the simplified (pre-consolidated) network data onto the consolidated network data. Then, the variable values were aggregated for each corresponding consolidated street segment. The specific aggregation method varied depending on the variable; for ‘Movement Potential’, we assigned the maximum value from the overlapping fragments. For the remaining three variables, we calculated a length-weighted mean. This ensures that longer street fragments contribute proportionally more to the final aggregated values.
 
 ### Clustering & Typology Cosntruction
 
@@ -199,7 +198,7 @@ We applied targeted weights to each standardized variable to align with our rese
 
 #### K-means Clustering
 
-We used the K-means clustering algorithm to group the street segments into distinct urban typologies. To determine the optimal number of clusters, we used the Elbow Method. We tested a range of cluster counts (from 2 to 9) and measured how compact the resulting clusters were by calculating the total within-cluster sum of squares. Based on this method, we selected 4 as the optimal number of clusters and executed the clustering model. 
+We used the K-means clustering algorithm to group the street segments into distinct urban typologies. To determine the optimal number of clusters, we used the Elbow Method. We tested a range of cluster counts (from 2 to 9) and measured how compact the resulting clusters were by calculating the total within-cluster sum of squares. Based on this method, we selected 4 as the optimal number of clusters and executed the clustering model.
 
 ### Reproducibility of Workflow
 
@@ -209,12 +208,11 @@ To ensure our analysis pipeline is fully reproducible, we designed an automated 
 
 ### Angular Choice
 
-The spatial configuration of pedestrian movement potential exposes deep architectural differences between the two historic cores (@fig-choice). 
+The spatial configuration of pedestrian movement potential exposes deep architectural differences between the two historic cores (@fig-choice).
 
 In Delft, the highest pedestrian choice scores map an organic, radial pathing layout. This high through-movement potential is visible along primary historic commercial corridors, Oude Langendijk for instance, stands out with a high choice score, alongside paths crossing the central Markt (Market Square). The dense street grid distributes potential movement across many parallel alleys, offering plenty of alternative routes.
 
-In Xi'an, the movement potential is concentrated along the perimeter, where the southern outer ring road dominates the network with peak choice scores exceeding 600,000. This popular outer ring acts as a structural funnel, branching inward along strict main axes toward the center. 
-
+In Xi'an, the movement potential is concentrated along the perimeter, where the southern outer ring road dominates the network with peak choice scores exceeding 600,000. This popular outer ring acts as a structural funnel, branching inward along strict main axes toward the center.
 
 ::: {#fig-choice layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_pedestrian_choice.png){lightbox="choice"}
@@ -223,8 +221,6 @@ In Xi'an, the movement potential is concentrated along the perimeter, where the 
 
 Map showing the Pedestrian Choice for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
-
-> GE of primary movement corridors
 
 ### Surface Temperature
 
@@ -242,8 +238,6 @@ Xi'an exhibits a severe, Urban Heat Island (UHI) effect. Wide asphalt corridors 
 Map showing the Surface Temperature for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
 
-> GE of hotspots and cooler areas
-
 ### Distance to Green Spaces
 
 Proximity to green infrastructure is modeled as the shortest Euclidean distance from the center point of each street segment to the nearest boundary edge of an OpenStreetMap designated urban park or green space (@fig-distgreen). This metric functions as an indicator of potential passive cooling benefits, as vegetated areas actively mitigate localized heat.
@@ -260,8 +254,6 @@ In Xi'an, green access is highly unequal. Streets next to the outer city walls o
 Map showing the Distance to Greens for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
 
-> GE of low access areas
-
 ### Distance to Blue Spaces
 
 Complementing the green metric, Distance to Blue Spaces measures the Euclidean proximity of each segment to the nearest surface water body, such as canals, rivers, or lakes. Water infrastructure actively mitigates localized heat, providing vital cooling and thermal buffering within highly built-up historic urban areas.
@@ -277,8 +269,6 @@ In Xi'an, blue infrastructure is restricted to the outer perimeter. The ancient 
 
 Map showing the Distance to Blue Network for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
-
-> GE of low access areas
 
 ### Summary of Indicators
 
@@ -305,14 +295,13 @@ To find the ideal number of typologies, an Elbow Analysis evaluating the Within-
 By plotting the average values on a parallel coordinates axis, the mathematical clusters can be translated into descriptive urban typologies. Because our manual weighting system prioritized temperature and movement potential, the algorithm identified four distinct street profiles:
 
 | Typology | Cluster ID (Color) | Movement Potential | Surface Temp | Dist to Green | Dist to Blue | Planning Strategy |
-| :--- | :---: | :--- | :--- | :--- | :--- | :--- |
-| **Typology A: Function-Driven Hotspots** | 1 (Orange) | Moderate-High | **Very High (~37.5°C)** | High (Far) | High (Far) | **Immediate Intervention** (Cool pavements, tree planting) |
-| **Typology B: Underutilized Comfort Spaces** | 2 (Green) | Very Low | **Very Cool (~33.0°C)** | Low (Close) | Low (Close) | **Preservation / Asset Protection** (Prevent development) |
-| **Typology C: Balanced Activity Spaces** | 3 (Blue) | **Highest** | Moderate-Warm | Low (Close) | Moderate | **Pedestrian Shade Infrastructure** (Awnings, arcades) |
+|:----------|:---------:|:----------|:----------|:----------|:----------|:----------|
+| **Typology A: Function-Driven Hotspots** | 1 (Orange) | Moderate-High | **Very High (\~37.5°C)** | High (Far) | High (Far) | **Immediate Intervention** (Cool pavements, tree planting) |
+| **Typology B: Underutilized Comfort Spaces** | 2 (Green) | Very Low | **Very Cool (\~33.0°C)** | Low (Close) | Low (Close) | **Preservation / Asset Protection** (Prevent development) |
+| **Typology C: Balanced Activity Spaces** | 3 (Blue) | **Highest** | Moderate-Warm | Low (Close) | Moderate | **Pedestrian Shade Infrastructure** |
 | **Typology D: Comfort-Driven Hotspots** | 4 (Pink) | Low | Moderate | Moderate | Moderate | **Passive Monitoring** (Baseline fabric) |
 
 Mapping these typologies back onto the geographic street grids exposes how these profiles materialize across different spatial layouts. In Delft, the cool *Typology B* zones are internal neighborhood networks, while *Typology D* is restricted to external vehicle bypass lines. In Xi'an, *Typology A* consumes the wide primary commercial axes, cutting straight through the core, while *Typology D* forms a protective, insulated perimeter running along the base of the city walls.
-
 
 ::: {#fig-clustermap layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_clusters.png){lightbox="choice"}
