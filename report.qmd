@@ -439,7 +439,11 @@ discuss how the typologies can support the implementation of nature-based soluti
 
 > priority map (line colour corresponds to where you need intervention and where you need preservation)
 
-## Conclusion
+## Discussion&Conclusion
+
+### Implications
+
+write blah
 
 ### Limitations
 
