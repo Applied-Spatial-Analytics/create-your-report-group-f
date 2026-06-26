@@ -309,37 +309,7 @@ Mapping these typologies back onto the geographic street grids exposes how these
 Maps showing the Spatial Distribution of Clusters for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
 
-## Discussion
-
-### Study Area Delimitation
-
-the influence of selecting the historic city centre and applying a 500 m buffer on the analysis = made both cases relatively comparable despite their overall variable scales 500m buffer = reduced edge effects and account for influence from surrounding streets and green spaces that influence the core
-
-### Unit of Analysis
-
-streets = where pedestrian experience cities = most meaningful planning unit advantage of segment-level = maintain spatial detail but remain comparable between two cities Neatnet = improved network consistency COINS = better correspond to actual conditions of movement
-
-### Selection of Criterias
-
-selected criterias relate to each other
-
-examine if high movement potential and high temp actually coincide in both compare both cities is this what the literature said
-
-::: {layout-ncol="2"}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_bivariate_map.png){lightbox="choice"}
-
-![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_bivariate_map.png){lightbox="choice"}
-
-Maps showing the Spatial Distribution of for the Historic City Centres of Delft (a) and Xi'an (b).
-:::
-
-examine how green influences these relationships = green influece on temp and how green could influence choice are the cooling effects equal in both cities? is this what the literature said
-
-> Figure Delft & Xi'an bivariate map (temp vs dist to green)
-
-> Figure Delft & Xi'an bivariate map (choice vs dist to green)
-
-### Typologies
+#### Typologies
 
 Discuss why typologies are the same and which are different
 
@@ -353,7 +323,7 @@ Maps showing the Spatial Distribution of Clusters for the Historic City Centres 
 
 relate representative streets from each typology to their observed urban characteristics using aerial imagery or street-level photographs
 
-#### Typology A: Function-Driven Hotspots
+##### Typology A: Function-Driven Hotspots
 
 ::: {layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_1.png){lightbox="choice"}
@@ -381,7 +351,7 @@ Typology A Details for Xi'an (b).
 :::
 :::::
 
-#### Typology B: Underutilized Comfort Spaces
+##### Typology B: Underutilized Comfort Spaces
 
 ::: {layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_2.png){lightbox="choice"}
@@ -409,7 +379,7 @@ Typology B Details for Xi'an (b).
 :::
 :::::
 
-#### Typology C: Balanced Activity Spaces
+##### Typology C: Balanced Activity Spaces
 
 ::: {layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_3.png){lightbox="choice"}
@@ -437,7 +407,7 @@ Typology C Details for Xi'an (b).
 :::
 :::::
 
-#### Typology D: Comfort-Driven Hotspots
+##### Typology D: Comfort-Driven Hotspots
 
 ::: {layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_4.png){lightbox="choice"}
@@ -469,17 +439,7 @@ discuss how the typologies can support the implementation of nature-based soluti
 
 > priority map (line colour corresponds to where you need intervention and where you need preservation)
 
-### Planning implications
-
-### Reproducibility
-
-can workflow be transferable to other historic cities? How did the principles we thought of in methods work where is reproducibility failing
-
-## Further Research
-
-### Contributions
-
-reproducible open-source analytical workflow for identification and prioritization integration of temp with both movement and environmental indicators application of workflow to two contrasting cities = common workflow can be used to get comparable results and still account for local conditions results provide basis for prioritisation and evidence-based climate adaptation interventions
+## Conclusion
 
 ### Limitations
 
@@ -493,31 +453,9 @@ The angular choice method used for computing potential for movement also represe
 
 Lastly, the weight of each variable in the cluster analysis and final priority classification were defined conceptually, and not based on or influenced by stakeholders' input. In practice, the weights attributed to the variables should be adapted to reflect the actual needs and values of the involved groups. The use of different weights could potentially yield completely different results, which would require further evaluation in order to validate the meaningfulness of the classification results in each specific context.
 
-### Next Steps
+### Further Research
 
 incorporate pedestrian counts, high resolution data and thermal comfort indices like PET or UTCI Account for season variance apply to other historic cities = evaluate transferabiltity and robustness accross differnt contexts
-
-## Conclusion
-
-Reproducible spatial analytics as bridge between environmental analysis and planning
-
-> How does thermal comfort vary across pedestrian street segments within the historic city center?
-
-thermal conditions not distributed uniformly
-
-> Which pedestrian streets are structurally important within the urban network?
-
-clear hierarchy of streets streets = representation of spatial importance = identification of streets with large no of people
-
-> Which pedestrian street segments should be prioritized for heat mitigation interventions based on thermal stress and network importance?
-
-can not prioritise based on thermal conditions only high thermal + high pedestrian = most impact = intervene cool thermal + high pedestrian = most impact = preserve
-
-> **How can thermally stressful conditions along important pedestrian streets be identified and prioritized in historic city centers?**
-
-typology based approach = identifying where nature-based climate adaptation measures are likely to achieve the greatest benefit
-
-application to two contexts = despite substantial differences in morphology and climate, a common analytical framework can support evidence-based climate adaptation
 
 ## Bibliography
 
