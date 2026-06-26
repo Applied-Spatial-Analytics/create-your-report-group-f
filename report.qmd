@@ -156,7 +156,7 @@ We selected street segments as our primary analytical unit. Since the administra
 | Delft | 84.79 | 120.80 | 42.47% |
 | Xi'an | 294.20 | 366.76 | 24.66% |
 
-: Comparison of street segment average lengths (pre- vs. post-simplification){#tbl-network_comparison}
+: Comparison of street segment average lengths (pre- vs. post-simplification)
 
 ![Network Processing Workflow](scripts/output/01_Report/01_Introduction/preprocess_re.png){#fig-processing_neatnet}
 
@@ -204,11 +204,11 @@ We used the K-means clustering algorithm to group the street segments into disti
 
 To ensure our analysis pipeline is fully reproducible, we designed an automated pipeline in RStudio. Every step, including loading data, cleaning the street networks, calculating distances, standardizing variables, and running the K-Means clustering, is handled completely by code. Important settings like the number of clusters ($K = 4$) and the variable weights are cleanly isolated. This makes it easy for anyone to audit, test, or update the analysis for a different project without relying on manual desktop GIS tools, which are prone to hidden human errors.
 
-Our workflow strictly follows the **FAIR (Findable, Accessible, Interoperable, and Reusable)** data principles to support open science:
+Our workflow strictly follows the FAIR (Findable, Accessible, Interoperable, and Reusable) data principles to support open science:
 
-- **Findable & Accessible:** Our entire code repository is hosted online using GitHub Classroom. This makes our methodology transparent and fully open-source.
-- **Interoperable:** We use open spatial data formats like GeoPackages (`.gpkg`), GeoJSONs (`.geojson`), and public Landsat GeoTIFFs. These files work seamlessly across R, Python, or regular QGIS software without requiring proprietary formats.
-- **Reusable:** The script separates the general data processing steps from city-specific settings. This means the exact same code pipeline can be reused to analyze and map street typologies in other historic cities around the world.
+- Findable & Accessible: Our entire code repository is hosted online using GitHub Classroom. This makes our methodology transparent and fully open-source.
+- Interoperable: We use open spatial data formats like GeoPackages (`.gpkg`), GeoJSONs (`.geojson`), and public Landsat GeoTIFFs. These files work seamlessly across R, Python, or regular QGIS software without requiring proprietary formats.
+- Reusable: The script separates the general data processing steps from city-specific settings. This means the exact same code pipeline can be reused to analyze and map street typologies in other historic cities around the world.
 
 ## Results
 
@@ -311,7 +311,7 @@ Mapping these typologies back onto the geographic street grids exposes how these
 Maps showing the Spatial Distribution of Clusters for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
 
-#### Examples of Typologies  
+#### Examples of Typologies
 
 Discuss why typologies are the same and which are different
 
