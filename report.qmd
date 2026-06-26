@@ -486,11 +486,10 @@ The study has shown that thermal conditions are not distributed uniformly within
 
 These clusters were the base to the definition of four distinct typologies, that combine the potential for movement and LST as main variables - besides distance to blue and green infrastructure as complementary variables. These topologies indicate priority for intervention, based on the principle that streets with stressful thermal conditions and higher flux of pedestrians should be prioritized, as NBS are likely to achieve greater impact in those contexts. At the same time, it is assumed that streets with higher thermal comfort should be preserved. Ultimately, this study presents a common analytical framework that, despite substantial differences in morphology and climate between cities, can support evidence-based climate adaptation in urban environments.
 
+## Statement regarding the use of AI
+
+OpenAi’s ChatGPT version GPT-5.5 and Google’s Gemini 3 Flash (Free tier) were utilized during the development of this project to aid in code de-bugging, algorithm optimization, and technical troubleshooting. These tools were also used to refine, format, and polish the written sections of the report to ensure academic clarity. However, all core methodology, mathematical logic, and final analysis were independently directed and verified by the authors.
 
 ## Bibliography
 
 ### Literature
-
-## Statement regarding the use of AI
-
-OpenAi’s ChatGPT version GPT-5.5 and Google’s Gemini 3 Flash (Free tier) were utilized during the development of this project to aid in code de-bugging, algorithm optimization, and technical troubleshooting. These tools were also used to refine, format, and polish the written sections of the report to ensure academic clarity. However, all core methodology, mathematical logic, and final analysis were independently directed and verified by the authors.
