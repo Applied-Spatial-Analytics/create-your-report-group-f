@@ -452,7 +452,7 @@ Typology D Details for Xi'an (b).
 :::
 :::::
 
-## Discussion&Conclusion
+## Discussion
 
 ### Implications
 
@@ -476,7 +476,10 @@ Lastly, the weight of each variable in the cluster analysis and final priority c
 
 ### Further Research
 
-incorporate pedestrian counts, high resolution data and thermal comfort indices like PET or UTCI Account for season variance apply to other historic cities = evaluate transferabiltity and robustness accross differnt contexts
+There are several ways in which this study may be further developed by future research. One of them is the use of a thermal comfort index, such as UTCI or Psychologically Equivalent Temperature (PET), as the temperature-related variable. Those indexes include a broader range of phenomena that influence human perception of temperature, and thus are capable of better approximating the actual pedestrian experience with respect to heat stress.  Alternatively, higher resolution temperature data can be used to potentially capture more nuanced differences between neighboring street segments, possibly implying a different cluster characterization and classification. In a similar way, a new variable could be incorporated to the pipeline in order to represent the actual pedestrian traffic within the study areas. Methods like the integration of real-time data captured from physical sensors or by leveraging crowdsourced information from mobile network linkages can be discussed. Validating the model against observed pedestrian flows would address the limitations of using geometric computations to measure street popularity. Ultimately, incorporating such empirical data would lead to more precise and reality-based urban design interventions.
+
+## Conclusion
+FILL HERE
 
 ## Bibliography
 
