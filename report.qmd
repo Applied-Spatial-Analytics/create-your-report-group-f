@@ -490,3 +490,7 @@ These clusters were the base to the definition of four distinct typologies, that
 ## Bibliography
 
 ### Literature
+
+##Statement regarding the use of AI
+
+OpenAi’s ChatGPT version GPT-5.5 and Google’s Gemini 3 Flash (Free tier) were utilized during the development of this project to aid in code de-bugging, algorithm optimization, and technical troubleshooting. These tools were also used to refine, format, and polish the written sections of the report to ensure academic clarity. However, all core methodology, mathematical logic, and final analysis were independently directed and verified by the authors.
