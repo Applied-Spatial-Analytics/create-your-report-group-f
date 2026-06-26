@@ -313,7 +313,7 @@ Maps showing the Spatial Distribution of Clusters for the Historic City Centres 
 
 #### Examples of Typologies
 
-Discuss why typologies are the same and which are different
+Comparing the two cities reveals that despite major differences in urban scale and morphology, the algorithm identifies structural and environmental similarities across both street networks. By evaluating specific streets, we can observe how the same microclimatic and functional typologies present in both Delft and Xi’an.
 
 ::: {layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_clusters.png){lightbox="choice"}
@@ -323,9 +323,14 @@ Discuss why typologies are the same and which are different
 Maps showing the Spatial Distribution of Clusters for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
 
-relate representative streets from each typology to their observed urban characteristics using aerial imagery or street-level photographs
 
 ##### Typology A: Function-Driven Hotspots
+
+Typology A marks critical problem areas where high potential pedestrian popularity directly coincides with high surface heat and low proximity to natural cooling resources.
+
+n Delft, this functional hotspot profile matches highly active commercial streets like Koornmarkt and Molenstraat. High hardscape paving exposure creates elevated localized temperatures along these primary walking corridors.  
+
+In Xi'an, this exact same conflict appears along dominant structural spines like Dong Er Lu (East Second Road) and Nan Dajie (Great South Street). These major avenues function identically to Delft's main streets, concentrating high numbers of pedestrians in unshaded, heat-stressed urban conditions.
 
 ::: {layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_1.png){lightbox="choice"}
@@ -354,6 +359,11 @@ Typology A Details for Xi'an (b).
 :::::
 
 ##### Typology B: Underutilized Comfort Spaces
+Typology B represents climate-resilient streets characterized by lower surface temperatures and short distances to cooling buffers, though they currently experience low potential pedestrian traffic volumes.
+
+In Delft, this profile is typified by residential streets like Nieuwe Gracht and Oude IJsbaan. These streets are sheltered from extreme heat but do not serve as major potential paths.
+
+In Xi'an, this identical environmental condition appears along secondary, sheltered paths like Dongxin Jie Fu Lu (East New Street Side Road) and Xianning Xue Xiang (Xianning Academy Alley). Just like their counterparts in Delft, these segments remain highly comfortable but underutilized within the broader street network.
 
 ::: {layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_2.png){lightbox="choice"}
@@ -382,6 +392,11 @@ Typology B Details for Xi'an (b).
 :::::
 
 ##### Typology C: Balanced Activity Spaces
+Typology C represents balanced urban environments that successfully support active pedestrian movement while maintaining close access to cooling elements.
+
+In Delft, this profile is found on main perimeter corridors like Oostplantsoen and Westvest. These streets handle steady traffic but are buffered by immediate proximity to open green edges and canal infrastructure.
+
+In Xi'an, this balance is mirrored along Nanlao Jie (Nanlao Street) and Shuncheng Bei Lu Xi Duan (West Section of Shuncheng North Road). Running directly parallel to the ancient wall's massive park and canal system, these streets handle significant local movement while enjoying strong, passive environmental cooling.
 
 ::: {layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_3.png){lightbox="choice"}
@@ -411,6 +426,13 @@ Typology C Details for Xi'an (b).
 
 ##### Typology D: Comfort-Driven Hotspots
 
+Typology D represents highly populated, highly active street networks that remain safe and comfortable. As verified by the density plots, while these active segments sit inside the built-up urban fabric, their temperature distributions shift distinctly to the left, capturing the lowest heat profile among all active, high-popularity clusters.
+
+In Delft, this profile highlights high-comfort pedestrian corridors like Nieuwe Plantage and Kanaalweg. These corridors experience low temperatures and short distances to water, keeping them naturally comfortable for public activity.
+
+In Xi'an, this trend matches comfortable corridors like Xi Wu Lu (West Fifth Road) and Shuncheng Dong Lu Nan Duan (Shuncheng East Road South Section). These streets are protected from heat stress due to shorter distances to blue-green assets, functioning as highly reliable, low-heat urban pathways.
+
+
 ::: {layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_4.png){lightbox="choice"}
 
@@ -437,9 +459,7 @@ Typology D Details for Xi'an (b).
 :::
 :::::
 
-discuss how the typologies can support the implementation of nature-based solutions= distinguishing between streets that require immediate intervention and those where existing environmental conditions should be preserved
 
-> priority map (line colour corresponds to where you need intervention and where you need preservation)
 
 ## Discussion&Conclusion
 
