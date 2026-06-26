@@ -154,11 +154,11 @@ The initial street data was derived from OpenStreetMap (OSM). As raw OSM data of
 Through this preprocessing, we generated two network data, the simplified network and the consolidated network. The simplified network data used for the subsequent step of variable calculation, while the consolidated network data used for variable aggregation. We specifically utilized the simplified (pre-consolidated) network data for variable calculation because the Angular Choice method, which was used to calculate the ‘Movement Potential’ variable, requires fragmented network data. Finally, the consolidated network data was employed during the subsequent clustering step. More details will be discussed in the respective sections.
 
 ![Network Processing Workflow](scripts/output/01_Report/01_Introduction/preprocess%20re.png){#fig-processing_neatnet}
-Table: Comparison of street segment average lengths (pre- vs. post-simplification) {#tbl-network_comparison}
 | City | Pre-simplified Avg. Length (m) | Post-simplified Avg. Length (m) | Length Increase (%) |
-| :--- | :---: | :---: | :---: |
+|------|------|------|------|
 | Delft | 84.79 | 120.80 | 42.47% |
 | Xi'an | 294.20 | 366.76 | 24.66% |
+: Comparison of street segment average lengths (pre- vs. post-simplification) {#tbl-network_comparison}
 
 ### Variable Calculation
 
