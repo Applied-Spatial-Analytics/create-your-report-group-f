@@ -202,7 +202,7 @@ We used the K-means clustering algorithm to group the street segments into disti
 
 ### Reproducibility of Workflow
 
-principles of reproducibility and FAIR data included and how
+To ensure our analysis pipeline is fully reproducible, we designed an automated pipeline. Every phase, including data processing, variable calculation, and clustering, is consistent and repeatable across different study areas. As the script incorporates hard-coded parameters, such as the number of clusters and variable weights, it allows others to audit them based on their research objective and input data.
 
 ## Results
 
