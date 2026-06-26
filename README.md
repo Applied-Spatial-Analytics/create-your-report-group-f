@@ -1,36 +1,49 @@
-# Report template for the Applied Spatial Analytics 2026 course
+# Thermal Comfort in the Historic Core: A Comparative Network Analysis of Delft and Xi’an
+### Group F 
+  - Chaeyeon Moon ( Geomatics)
+  - Evangelia Angeliki Palli (Geomatics)
+  - Julia Fossa Marques (Geomatics)
+  - Prianka Girish Bali (Urbanism)
 
-This is a template repository used as a starting point for the group
-reports produced in the Applied Spatial Analytics 2025 course at
-TU Delft.
+## Repository Structure
 
-By starting this assignment in GitHub Classroom, you created a copy
-of this repository that you have write access to. You will continue to
-work on your report in that repository throughout the quarter. A great
-way to practice and apply what you learned in the "Intro to Git and GitHub"
-assignment!
+```text
+├── scripts/                            # Source code and input/output data
+│   ├── data/                           # All required input data
+│   ├── output/                         # Generated output files
+│   │      └── 01_Report/               # Figures generated for the final report
+│   ├── preprocess_neatnet.py           # Preprocessing script 1: Network Simplification
+│   ├── preprocess_coins.py             # Preprocessing script 2: Network Consolidation
+│   ├── pipeline.R                      # Main analysis (clustering)
+│   ├── report_config.R                 # Plot script 1 (for report)
+│   ├── report_figure_exports.R         # Plot script 2 (for report)
+│   └── report_variable_distribution.R  # Plot script 3 (for report)
+├── report.qmd                          # Quarto file of report
+├── report_references.bib               # Bibliography list of report
+└── styles.css                          # Style sheet for report 
+```
 
-### Getting started with the report
+## How to Run
 
-1. In RStudio, create a new project from version control. Use the
-   URL of your repository to clone it.
-   
-2. To start working on the report, open the `report.qmd` file, add the
-   names of your group members, and press on the "Render" button. Next,
-   stage and commit all changed files and push them to GitHub. You will
-   follow this **stage -> commit -> push** workflow every time you make a
-   change.
+Please follow the sequence below to ensure data dependencies are met.
 
-### Feedback
+### 1. Preprocessing
+Run the preprocessing scripts to prepare the network data. Ensure the output paths point to the `data/` directory.
 
-In the **Pull requests** section of your repository, you will find a
-**Feedback** pull request. We will use this pull request to provide
-feedback on your report throughout the quarter. You can also use this
-pull request to ask questions about the feedback.
+* **Run `scripts/preprocess_neatnet.py`**
+  - It simplifies the raw network data
+  - **Note:** Update `INPUT_PATH` (line 6) and `OUTPUT_PATH` (line 24) in the script before running.
 
-### Asking for help
+* **Run `scripts/preprocess_coins.py`**
+  - It consolidates the simplified network data
+  - **Note:** Update `INPUT_PATH` (line 7) and `OUTPUT_PATH` (line 10) in the script before running.
 
-If you have questions about the assignment, please ask them in
-[Discussions](https://github.com/Applied-Spatial-Analytics/asa2026/discussions).
+### 2. Main Analysis
+* **Run `scripts/pipeline.R`** 
+  - It executes variable calculation and spatial clustering.
 
-
+### 3. [Optional] Report Visualization 
+The following scripts generate the figures used in the final report:
+- `scripts/report_config.R`
+- `scripts/report_figure_exports.R`
+- `scripts/report_variable_distribution.R`
