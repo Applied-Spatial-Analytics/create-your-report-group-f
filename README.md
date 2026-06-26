@@ -27,7 +27,7 @@
 
 Please follow the sequence below to ensure data dependencies are met.
 
-### 1. Preprocessing
+#### 1. Preprocessing
 Run the preprocessing scripts to prepare the network data. Ensure the output paths point to the `data/` directory.
 
 * **Run `scripts/preprocess_neatnet.py`**
@@ -38,11 +38,11 @@ Run the preprocessing scripts to prepare the network data. Ensure the output pat
   - It consolidates the simplified network data
   - **Note:** Update `INPUT_PATH` (line 7) and `OUTPUT_PATH` (line 10) in the script before running.
 
-### 2. Main Analysis
+#### 2. Main Analysis
 * **Run `scripts/pipeline.R`** 
   - It executes variable calculation and spatial clustering.
 
-### 3. [Optional] Report Visualization 
+#### 3. [Optional] Report Visualization 
 The following scripts generate the figures used in the final report:
 - `scripts/report_config.R`
 - `scripts/report_figure_exports.R`
