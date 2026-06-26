@@ -445,7 +445,11 @@ discuss how the typologies can support the implementation of nature-based soluti
 
 ### Implications
 
-write blah
+We implemented a multi-criteria decision analysis model specifically tailored for urban network thermal comfort by integrating four indicators: Movement Potential, Land Surface Temperature, Distance to Green Space, and Distance to Blue Space. This comprehensive framework allows us to categorize streets into meaningful typologies by evaluating multiple relevant factors simultaneously. Furthermore, by prioritizing thermal indices and movement potential for clustering, our method effectively identifies street segments that require urgent heat mitigation. At the same time, by incorporating distances to green and blue infrastructure, the results indicate whether the optimal strategy should focus on establishing new nearby green-blue spaces or improving existing connectivity to them.
+
+These identified typologies offer an evidence-based foundation for climate adaptation. By suggesting which streets should be prioritized and identifying the most suitable strategies for each typology, this research offers urban planners insights for strategic decision-making. 
+
+Finally, our analysis framework is highly reusable for comparative urban studies, particularly when study areas differ in scale. By employing a segment-based approach, the framework resolves scale-mismatch issues. In addition, the workflow is fully automated, ensuring high reproducibility; it generates comparable results across diverse urban contexts while remaining sensitive to the unique local conditions of each city.
 
 ### Limitations
 
