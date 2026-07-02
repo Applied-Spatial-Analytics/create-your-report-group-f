@@ -52,7 +52,7 @@ The two cities present contrasting urban morphologies as seen in @fig-case-selec
 By analyzing Delft and Xi'an using a common spatial analytical framework, this study investigates whether comparable street typologies and climate adaptation priorities emerge despite their differing physical and climatic conditions. The comparison therefore provides insight into both the context specific characteristics as well as patterns that may be transferable across historic urban landscapes.
 
 ::: {#fig-case-selection layout-ncol="2"}
-![**(a) Delft**](scripts/output/01_Report/02_Methods/Delft_street_Morphology.png){lightbox="choice"}
+![**(a) Delft**](scripts/output/01_Report/02_Methods/delft_street_Morphology.png){lightbox="choice"}
 
 ![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_street_morphology.png){lightbox="choice"}
 
@@ -103,11 +103,11 @@ Open Street Map RAW Data for the historic city centres of Delft (a) and Xi'an (b
 ## Land Surface Temperature
 
 ::: {#fig-lst layout-ncol="2"}
-![**(a) Delft**](scripts/output/01_Report/02_Methods/Delft_surface_temperature_context.png){lightbox="study" width="100%"}
+![**(a) Delft**](scripts/output/01_Report/02_Methods/delft_surface_temperature_context.png){lightbox="study"}
 
 **(a) Delft**
 
-![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_surface_temperature_context.png){lightbox="study" width="100%"}
+![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_surface_temperature_context.png){lightbox="study"}
 
 **(b) Xi'an**
 
@@ -125,7 +125,7 @@ A 500m buffer was then applied around each historic city center, corresponding t
 ## Study Area
 
 ::: {#fig-study-area layout-ncol="2"}
-![**(a) Delft**](scripts/output/01_Report/02_Methods/Delft_study_area.png){lightbox="study"}
+![**(a) Delft**](scripts/output/01_Report/02_Methods/delft_study_area.png){lightbox="study"}
 
 ![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_study_area.png){lightbox="study"}
 
@@ -135,11 +135,11 @@ Study area boundaries for the Historic City Centres of Delft (a) and Xi'an (b).
 ## Study Area Buffer
 
 ::: {#fig-study-buffer layout-ncol="2"}
-![**(a) Delft**](scripts/output/01_Report/02_Methods/Delft_study_area_with_buffer.png){lightbox="study" width="100%"}
+![**(a) Delft**](scripts/output/01_Report/02_Methods/delft_study_area_with_buffer.png){lightbox="study"}
 
 **(a) Delft**
 
-![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_study_area_with_buffer.png){lightbox="study" width="100%"}
+![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_study_area_with_buffer.png){lightbox="study"}
 
 **(b) Xi'an**
 
@@ -255,7 +255,7 @@ In Xi'an, green access is highly unequal. Streets next to the outer city walls o
 ::: {#fig-distgreen layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_distance_to_green.png){lightbox="choice"}
 
-![**(b) Xi'an**](scripts/output/01_Report/03_Results/xian_distance_to_green.png){lightbox="choice"}
+![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_distance_to_green.png){lightbox="choice"}
 
 Map showing the Distance to Greens for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
@@ -269,9 +269,9 @@ In Delft, water access is highly uniform. Canals are deeply integrated into the 
 In Xi'an, blue infrastructure is restricted to the outer perimeter. The ancient canal system surrounds the historic core, offering excellent water proximity to streets near the city walls. However, the inner grid lacks water, meaning distances to cooling water elements increase sharply as you move toward the central Bell Tower.
 
 ::: {#fig-distblue layout-ncol="2"}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_distance_to_blue.png){lightbox="choice"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_distance_to_blue.png){lightbox="choice"}
 
-![**(b) Xi'an**](scripts/output/01_Report/03_Results/xian_distance_to_blue.png){lightbox="choice"}
+![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_distance_to_blue.png){lightbox="choice"}
 
 Map showing the Distance to Blue Network for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
@@ -281,9 +281,9 @@ Map showing the Distance to Blue Network for the Historic City Centres of Delft 
 While regional climates differ, with Xi'an reaching much higher peak temperatures than Delft, the overall spatial patterns are similar (@fig-clustervardistri). In both cities, wide street intersections with little vegetation consistently create matching heat and traffic bottlenecks. This shared pattern provides a clear mathematical baseline for the clustering analysis.
 
 ::: {#fig-clustervardistri layout-ncol="2"}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_cluster_distribution.png){lightbox="choice"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_cluster_distribution.png){lightbox="choice"}
 
-![**(b) Xi'an**](scripts/output/01_Report/03_Results/xian_cluster_distribution.png){lightbox="choice"}
+![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_cluster_distribution.png){lightbox="choice"}
 
 Graph showing the Distribution of Clusters across the Variables for the Historic City Centres of Delft (a) and Xi'an (b).
 :::
@@ -316,7 +316,7 @@ Maps showing the Spatial Distribution of Clusters for the Historic City Centres 
 Comparing the two cities reveals that despite major differences in urban scale and morphology, the algorithm identifies structural and environmental similarities across both street networks. By evaluating specific streets, we can observe how the same microclimatic and functional typologies present in both Delft and Xi’an.
 
 ::: {layout-ncol="2" fig-align="center"}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_clusters.png){lightbox="choice"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_clusters.png){lightbox="choice"}
 
 ![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_clusters.png){lightbox="choice"}
 :::
@@ -331,7 +331,7 @@ In Delft, this functional hotspot profile matches highly active commercial stree
 In Xi'an, this exact same conflict appears along dominant structural spines like Dong Er Lu (East Second Road) and Nan Dajie (Great South Street). These major avenues function identically to Delft's main streets, concentrating high numbers of pedestrians in unshaded, heat-stressed urban conditions.
 
 ::: {layout-ncol="2" fig-align="center"}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_1.png){lightbox="choice"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_typology_1.png){lightbox="choice"}
 
 ![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_typology_1.png){lightbox="choice"}
 :::
@@ -341,7 +341,7 @@ Maps showing the Spatial Distribution of Typology A for the Historic City Centre
 ## Delft
 
 ::: {#fig-type-a-delft}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_1_GE.png){lightbox="study"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_typology_1_GE.png){lightbox="study"}
 
 Typology A Details for Delft (a).
 :::
@@ -349,7 +349,7 @@ Typology A Details for Delft (a).
 ## Xi'an
 
 ::: {#fig-type-a-xian}
-![**(b) Xi'an**](scripts/output/01_Report/03_Results/xian_typology_1_GE.png){lightbox="study" width="100%"}
+![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_typology_1_GE.png){lightbox="study" width="100%"}
 
 Typology A Details for Xi'an (b).
 :::
@@ -363,7 +363,7 @@ In Delft, this profile is typified by residential streets like Nieuwe Gracht and
 In Xi'an, this identical environmental condition appears along secondary, sheltered paths like Dongxin Jie Fu Lu (East New Street Side Road) and Xianning Xue Xiang (Xianning Academy Alley). Just like their counterparts in Delft, these segments remain highly comfortable but underutilized within the broader street network.
 
 ::: {layout-ncol="2" fig-align="center"}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_2.png){lightbox="choice"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_typology_2.png){lightbox="choice"}
 
 ![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_typology_2.png){lightbox="choice"}
 :::
@@ -373,7 +373,7 @@ Maps showing the Spatial Distribution of Typology B for the Historic City Centre
 ## Delft
 
 ::: {#fig-type-b-delft}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_2_GE.png){lightbox="study"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_typology_2_GE.png){lightbox="study"}
 
 Typology A Details for Delft (a).
 :::
@@ -381,7 +381,7 @@ Typology A Details for Delft (a).
 ## Xi'an
 
 ::: {#fig-type-b-xian}
-![**(b) Xi'an**](scripts/output/01_Report/03_Results/xian_typology_2_GE.png){lightbox="study" width="100%"}
+![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_typology_2_GE.png){lightbox="study" width="100%"}
 
 Typology B Details for Xi'an (b).
 :::
@@ -395,7 +395,7 @@ In Delft, this profile is found on main perimeter corridors like Oostplantsoen a
 In Xi'an, this balance is mirrored along Nanlao Jie (Nanlao Street) and Shuncheng Bei Lu Xi Duan (West Section of Shuncheng North Road). Running directly parallel to the ancient wall's massive park and canal system, these streets handle significant local movement while enjoying strong, passive environmental cooling.
 
 ::: {layout-ncol="2" fig-align="center"}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_3.png){lightbox="choice"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_typology_3.png){lightbox="choice"}
 
 ![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_typology_3.png){lightbox="choice"}
 :::
@@ -405,7 +405,7 @@ Maps showing the Spatial Distribution of Typology C for the Historic City Centre
 ## Delft
 
 ::: {#fig-type-c-delft}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_3_GE.png){lightbox="study"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_typology_3_GE.png){lightbox="study"}
 
 Typology C Details for Delft (a).
 :::
@@ -413,7 +413,7 @@ Typology C Details for Delft (a).
 ## Xi'an
 
 ::: {#fig-type-c-xian}
-![**(b) Xi'an**](scripts/output/01_Report/03_Results/xian_typology_3_GE.png){lightbox="study" width="100%"}
+![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_typology_3_GE.png){lightbox="study" width="100%"}
 
 Typology C Details for Xi'an (b).
 :::
@@ -428,7 +428,7 @@ In Delft, this profile highlights high-comfort pedestrian corridors like Nieuwe 
 In Xi'an, this trend matches comfortable corridors like Xi Wu Lu (West Fifth Road) and Shuncheng Dong Lu Nan Duan (Shuncheng East Road South Section). These streets are protected from heat stress due to shorter distances to blue-green assets, functioning as highly reliable, low-heat urban pathways.
 
 ::: {layout-ncol="2" fig-align="center"}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_4.png){lightbox="choice"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_typology_4.png){lightbox="choice"}
 
 ![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_typology_4.png){lightbox="choice"}
 :::
@@ -438,7 +438,7 @@ Maps showing the Spatial Distribution of Typology D for the Historic City Centre
 ## Delft
 
 ::: {#fig-type-d-delft}
-![**(a) Delft**](scripts/output/01_Report/03_Results/delft_typology_4_GE.png){lightbox="study"}
+![**(a) Delft**](scripts/output/01_Report/03_Results/Delft_typology_4_GE.png){lightbox="study"}
 
 Typology A Details for Delft (a).
 :::
@@ -446,7 +446,7 @@ Typology A Details for Delft (a).
 ## Xi'an
 
 ::: {#fig-type-d-xian}
-![**(b) Xi'an**](scripts/output/01_Report/03_Results/xian_typology_4_GE.png){lightbox="study" width="100%"}
+![**(b) Xi'an**](scripts/output/01_Report/03_Results/Xian_typology_4_GE.png){lightbox="study" width="100%"}
 
 Typology D Details for Xi'an (b).
 :::
