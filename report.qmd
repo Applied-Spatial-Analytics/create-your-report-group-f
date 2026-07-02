@@ -65,11 +65,11 @@ Existing research has demonstrated how urban morphology, vegetation and water bo
 
 To address this gap, this study investigates the historic city centers of Delft and Xi'an through the following research questions:
 
-![Research Questions](scripts/output/01_Report/01_Introduction/Research%20Questions.png){#fig-research_ques}
+![Research Questions](scripts/output/01_Report/01_Introduction/Research Questions.png){#fig-research_ques}
 
 To answer these research questions, each is operationalized into four measurable spatial variables: Movement Potential, representing street network importance through Angular Choice; Land Surface Temperature, capturing thermal conditions; and Distance to Green Space and Distance to Blue Space, characterizing the availability of natural cooling resources. Together, these variables form a reproducible analytical framework that identifies street typologies based on movement, heat exposure, and access to cooling infrastructure. The resulting framework supports the prioritization of pedestrian streets for the implementation of nature-based solutions (NBS), providing an evidence-based approach to optimizing thermal comfort within historic city centers.
 
-![Research Questions with Variables](scripts/output/01_Report/01_Introduction/Research%20Questions_Variables.png){#fig-research_ques_variable}
+![Research Questions with Variables](scripts/output/01_Report/01_Introduction/Research Questions_Variables.png){#fig-research_ques_variable}
 
 ## Methods
 
@@ -77,7 +77,7 @@ To answer these research questions, each is operationalized into four measurable
 
 The analytical framework was developed to operationalize the research questions through a reproducible spatial workflow (@fig-analytical_framework). Rather than evaluating thermal conditions in isolation, the framework integrates indicators of street network importance, thermal stress, and access to natural cooling resources to identify pedestrian street typologies and support evidence-based climate adaptation in historic city centers.
 
-![Analytical Framework](scripts/output/01_Report/01_Introduction/Analytical%20Framework.png){#fig-analytical_framework}
+![Analytical Framework](scripts/output/01_Report/01_Introduction/Analytical Framework.png){#fig-analytical_framework}
 
 The workflow is organized into six sequential stages: (1) data acquisition, (2) network pre-processing, (3) variable calculation, (4) data aggregation and standardization, (5) clustering and typology construction, and (6) climate adaptation prioritization. This structure translates the research questions into measurable spatial variables, combines them into a consistent analytical framework, and ultimately identifies priority street segments for nature-based interventions. Applying the same workflow to both Delft and Xi'an ensures methodological consistency, enabling a direct comparison of street typologies and climate adaptation priorities across two contrasting historic city centers.
 
@@ -93,7 +93,7 @@ Based on these criterias, four datasets were collected to represent the variable
 ## Open Street Maps Data
 
 ::: {#fig-osm layout-ncol="2"}
-![**(a) Delft**](scripts/output/01_Report/02_Methods/Delft_osm.png){lightbox="study"}
+![**(a) Delft**](scripts/output/01_Report/02_Methods/delft_osm.png){lightbox="study"}
 
 ![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_osm.png){lightbox="study"}
 
