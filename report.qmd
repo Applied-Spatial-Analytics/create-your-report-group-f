@@ -52,7 +52,7 @@ The two cities present contrasting urban morphologies as seen in @fig-case-selec
 By analyzing Delft and Xi'an using a common spatial analytical framework, this study investigates whether comparable street typologies and climate adaptation priorities emerge despite their differing physical and climatic conditions. The comparison therefore provides insight into both the context specific characteristics as well as patterns that may be transferable across historic urban landscapes.
 
 ::: {#fig-case-selection layout-ncol="2"}
-![**(a) Delft**](scripts/output/01_Report/02_Methods/delft_street_morphology.png){lightbox="choice"}
+![**(a) Delft**](scripts/output/01_Report/02_Methods/Delft_street_morphology.png){lightbox="choice"}
 
 ![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_street_morphology.png){lightbox="choice"}
 
@@ -105,11 +105,7 @@ Open Street Map RAW Data for the historic city centres of Delft (a) and Xi'an (b
 ::: {#fig-lst layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/02_Methods/delft_surface_temperature_context.png){lightbox="study"}
 
-**(a) Delft**
-
 ![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_surface_temperature_context.png){lightbox="study"}
-
-**(b) Xi'an**
 
 Landsurface Temperature Data for Delft (a) and Xi'an (b).
 :::
@@ -137,11 +133,7 @@ Study area boundaries for the Historic City Centres of Delft (a) and Xi'an (b).
 ::: {#fig-study-buffer layout-ncol="2"}
 ![**(a) Delft**](scripts/output/01_Report/02_Methods/delft_study_area_with_buffer.png){lightbox="study"}
 
-**(a) Delft**
-
 ![**(b) Xi'an**](scripts/output/01_Report/02_Methods/Xian_study_area_with_buffer.png){lightbox="study"}
-
-**(b) Xi'an**
 
 Historic City Centre boundaries and the 500 m analysis buffer for Delft (a) and Xi'an (b).
 :::
